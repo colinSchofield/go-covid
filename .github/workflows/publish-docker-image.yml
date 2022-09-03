@@ -29,11 +29,9 @@ jobs:
         push: true
         tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
 
-    - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always')
-      uses: Jberlinsky/kubernetes-action@master
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.DOCKER_HUB_USERNAME }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets['DEV_AWS_SECRET_ACCESS_KEY'] }}
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+    - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always') 
+      uses: steebchen/kubectl@v2.0.0
       with:
-        args: get pods
+        config: ${{ secrets.KUBE_CONFIG }}
+        version: v1.21.0
+        command: get pods
