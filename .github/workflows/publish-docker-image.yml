@@ -29,12 +29,9 @@ jobs:
         push: true
         tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
 
-    - name: authenticator
-      uses: prepor/action-aws-iam-authenticator@master
-
-    - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always') 
-      uses: steebchen/kubectl@v2.0.0
+    - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always')
+      uses: Jberlinsky/kubernetes-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       with:
-        config: ${{ secrets.KUBE_CONFIG }}
-        version: v1.21.0
-        command: get pods
+        args: get pods
