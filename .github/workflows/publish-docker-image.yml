@@ -22,6 +22,10 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }} 
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+    - name authenticator
+      uses: woofenator/action-aws-iam-authenticator@master
+    - run: aws-iam-authenticator version
+
     - name: Build and push to Docker Hub
       uses: docker/build-push-action@v2
       with:
