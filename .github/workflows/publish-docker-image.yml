@@ -32,6 +32,8 @@ jobs:
     - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always')
       uses: Jberlinsky/kubernetes-action@master
       env:
+        aws-access-key-id: ${{ secrets.DOCKER_HUB_USERNAME }}
+        aws-secret-access-key: ${{ secrets['DEV_AWS_SECRET_ACCESS_KEY'] }}
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       with:
         args: get pods
