@@ -1,0 +1,12 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: go-web
+  region: ap-southeast-2
+  version: "1.23"
+managedNodeGroups:
+- name: primary
+  instanceType: t2.small
+  minSize: 2
+  maxSize: 4
+  spot: true
