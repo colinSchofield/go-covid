@@ -22,7 +22,7 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }} 
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-    - name authenticator
+    - name: authenticator
       uses: woofenator/action-aws-iam-authenticator@master
     - run: aws-iam-authenticator version
 
