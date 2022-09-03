@@ -13,25 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    # - name: Checkout code
+    #   uses: actions/checkout@v3
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }} 
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+    # - name: Login to Docker Hub
+    #   uses: docker/login-action@v1
+    #   with:
+    #     username: ${{ secrets.DOCKER_HUB_USERNAME }} 
+    #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-    - name: Build and push to Docker Hub
-      uses: docker/build-push-action@v2
-      with:
-        context: src
-        push: true
-        tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
+    # - name: Build and push to Docker Hub
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     context: src
+    #     push: true
+    #     tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
 
     - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always') 
-      uses: steebchen/kubectl@v2.0.0
+      uses: danielr1996/kubectl-action@latest
       with:
-        config: ${{ secrets.KUBE_CONFIG }}
-        version: v1.21.0
-        command: get pods
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        args: get pods
