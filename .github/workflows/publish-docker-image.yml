@@ -29,12 +29,13 @@ jobs:
     #     push: true
     #     tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
 
-    - name aws cli
-      uses: unfor19/install-aws-cli-action@master
-      with:
-        version: ${{ matrix.AWS_CLI_VERSION }}
-      run: aws --version
-
+      - name: Configure AWS & New Relic credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
     - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always') 
       uses: danielr1996/kubectl-action@1.0.0
       with:
