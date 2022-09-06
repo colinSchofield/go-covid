@@ -1,45 +1,29 @@
-name: CI/CD with AWS EKS 
+name: CI/CD with AWS EKS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
     name: Build, tag and push to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
-    # - name: Checkout code
-    #   uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # - name: Login to Docker Hub
-    #   uses: docker/login-action@v1
-    #   with:
-    #     username: ${{ secrets.DOCKER_HUB_USERNAME }} 
-    #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-    # - name: Build and push to Docker Hub
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     context: src
-    #     push: true
-    #     tags:  colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
-
-      - name: Configure AWS & New Relic credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - run:
-          aws s3 ls
-          
-      # - name: Perform a K8s rolling update (loading the new image snapshot via imagePullPolicy of 'Always') 
-      #   uses: danielr1996/kubectl-action@1.0.0
-      #   with:
-      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      #     args: get pods
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: src
+          push: true
+          tags: colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
