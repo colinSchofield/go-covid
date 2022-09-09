@@ -1,8 +1,9 @@
 package main
 
 import (
-	"git.com/gol/controller"
-	"git.com/gol/service"
+	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/controller"
+	"git.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,9 +17,8 @@ const (
 )
 
 func main() {
+	config.Logger().Info("Starting Rest API Service..")
 	router := gin.Default()
-
 	router.GET(apiVersion+"/list/regions", regionController.GetListOfRegions)
-
 	router.Run()
 }

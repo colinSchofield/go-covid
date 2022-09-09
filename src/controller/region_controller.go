@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"git.com/gol/service"
+	"git.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 )
 

@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"git.com/gol/model"
-	"git.com/gol/service"
+	"git.com/colinSchofield/go-covid/model"
+	"git.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,15 +16,15 @@ func Test_HappyPathAllFlags(t *testing.T) {
 	controller := New(service)
 	record := httptest.NewRecorder()
 	context, _ := gin.CreateTestContext(record)
+	regions := []model.Region{}
 	// When
 	controller.GetListOfRegions(context)
 	// Then
 	if record.Code != 200 {
 		t.Errorf("Unexpected HTTP return code. Expected 200, but got %d", record.Code)
 	}
-	regions := []model.Region{}
 	if err := json.Unmarshal(record.Body.Bytes(), &regions); err != nil {
-		t.Errorf("String could not be unmarshalled? %s", err)
+		t.Errorf("String could not be unmarshalled: %s", err)
 	}
 	if len(regions) == 0 {
 		t.Errorf("Region object is empty!")

@@ -1,6 +1,8 @@
 package service
 
-import "git.com/gol/model"
+import (
+	"git.com/colinSchofield/go-covid/model"
+)
 
 type RegionService interface {
 	GetListOfRegions() []model.Region
