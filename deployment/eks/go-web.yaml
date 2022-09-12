@@ -7,6 +7,6 @@ metadata:
 managedNodeGroups:
 - name: primary
   instanceType: t2.small
-  minSize: 2
-  maxSize: 4
+  minSize: 1
+  maxSize: 2
   spot: true
