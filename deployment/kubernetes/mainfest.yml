@@ -14,6 +14,7 @@ spec:
       labels:
         app: go-web
     spec:
+      serviceAccountName: go-web-service-account
       containers:
       - name: go-web-pod
         image: colinschofield/go-web:latest
