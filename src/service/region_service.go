@@ -19,14 +19,14 @@ func (regionService regionService) GetListOfRegions() []model.Region {
 
 func (regionService regionService) GetEmojiForCountry(country string) string {
 	for _, region := range regionService.GetListOfRegions() {
-		if region.CountryCode == country {
+		if region.Key == country {
 			return region.Flag
 		}
 	}
 	return ""
 }
 
-func New() RegionService {
+func NewRegionService() RegionService {
 	return regionService{
 		regions: []model.Region{
 			{Key: "Australia", Location: "Australia", CountryCode: "AU", Flag: "🇦🇺"},

@@ -12,8 +12,8 @@ import (
 
 func Test_HappyPathAllFlags(t *testing.T) {
 	// Given
-	service := service.New()
-	controller := New(service)
+	service := service.NewRegionService()
+	controller := NewRegionController(service)
 	record := httptest.NewRecorder()
 	context, _ := gin.CreateTestContext(record)
 	regions := []model.Region{}
@@ -40,9 +40,9 @@ func Test_HappyPathAllFlags(t *testing.T) {
 func Test_HappyPathGetFlag(t *testing.T) {
 	// Given
 	expectedFlag := "🇦🇺"
-	australianCountry := "AU"
-	service := service.New()
-	controller := New(service)
+	australianCountry := "Australia"
+	service := service.NewRegionService()
+	controller := NewRegionController(service)
 	// When
 	flag := controller.GetEmojiForCountry(australianCountry)
 	// Then
@@ -55,36 +55,12 @@ func Test_GetUnknownFlag(t *testing.T) {
 	// Given
 	expectedFlag := ""
 	unknownCountry := "Not Known"
-	service := service.New()
-	controller := New(service)
+	service := service.NewRegionService()
+	controller := NewRegionController(service)
 	// When
 	flag := controller.GetEmojiForCountry(unknownCountry)
 	// Then
 	if flag != expectedFlag {
 		t.Errorf("Flag did not match! Was expecting %s, but got %s", expectedFlag, flag)
-	}
-}
-
-func Test_regionController_GetListOfRegions(t *testing.T) {
-	type fields struct {
-		regionService service.RegionService
-	}
-	type args struct {
-		context *gin.Context
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			controller := regionController{
-				regionService: tt.fields.regionService,
-			}
-			controller.GetListOfRegions(tt.args.context)
-		})
 	}
 }

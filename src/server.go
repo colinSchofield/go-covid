@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	regionService    service.RegionService       = service.New()
-	regionController controller.RegionController = controller.New(regionService)
+	regionService    service.RegionService       = service.NewRegionService()
+	regionController controller.RegionController = controller.NewRegionController(regionService)
 )
 
 const (

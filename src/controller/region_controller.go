@@ -16,7 +16,7 @@ type regionController struct {
 	regionService service.RegionService
 }
 
-func New(regionService service.RegionService) RegionController {
+func NewRegionController(regionService service.RegionService) RegionController {
 	return regionController{
 		regionService: regionService,
 	}
