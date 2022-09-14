@@ -19,7 +19,7 @@ func Test_CreatUserAndDelete(t *testing.T) {
 		Sms:     "123-432-1233",
 	}
 	// When
-	createdPerson, err := userService.CreateUser(person)
+	createdPerson, err := userService.CreateOrUpdateUser(person)
 	// Then
 	if err != nil {
 		t.Errorf("Something went wrong: %v", err)
@@ -62,10 +62,21 @@ func Test_TestCrudOnUser(t *testing.T) {
 		Sms:     "123-432-1233",
 	}
 	// When
-	createdPerson, err := userService.CreateUser(person)
+	createdPerson, err := userService.CreateOrUpdateUser(person)
 	// Then
 	if err != nil {
 		t.Errorf("Something went wrong: %v", err)
+	}
+	// Given
+	createdPerson.Age = 66
+	// When
+	updatedPerson, err := userService.CreateOrUpdateUser(createdPerson)
+	// Then
+	if err != nil {
+		t.Errorf("Something went wrong: %v", err)
+	}
+	if updatedPerson.Age != 66 {
+		t.Errorf("Age was not updated: %d", createdPerson.Age)
 	}
 	if _, err := userService.GetUser(createdPerson.Id); err != nil {
 		t.Errorf("Could not find the created user: %v", err)
@@ -91,7 +102,7 @@ func Test_DecoratedUserRegionList(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.GetDecoratedUser(person)
+	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.RegionList != "🇦🇺 🇨🇦 🇬🇧 " {
 		t.Error("Region List information is not correct?")
@@ -111,7 +122,7 @@ func Test_DecoratedUserRegionListUnknown(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.GetDecoratedUser(person)
+	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.RegionList != "   " {
 		t.Error("Region List information is not correct?")
@@ -131,7 +142,7 @@ func Test_DecoratedUserContact(t *testing.T) {
 		Sms:     "123-432-1233",
 	}
 	// When
-	decoratedUser, _ := userService.GetDecoratedUser(person)
+	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "💌 💬" {
 		t.Error("Contact information is not correct?")
@@ -151,7 +162,7 @@ func Test_DecoratedUserEmptyContact(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.GetDecoratedUser(person)
+	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "" {
 		t.Error("Contact information is not correct?")
