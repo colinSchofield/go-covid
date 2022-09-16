@@ -38,25 +38,25 @@ func NewUserService() UserService {
 	}
 }
 
-func (userService userService) CreateOrUpdateUser(person user.User) (user.User, error) {
+func (us userService) CreateOrUpdateUser(person user.User) (user.User, error) {
 
 	if len(person.Id) > 0 {
 		config.Logger().Debugf("User already exists, with id of %s.. Updating the user", person.Id)
-		return userService.updateUser(person)
+		return us.updateUser(person)
 	}
 
 	config.Logger().Debugf("Creating user, with name of %s", person.Name)
 	person.Id = uuid.New().String()
-	if err := userService.table.Put(person).Run(); err != nil {
+	if err := us.table.Put(person).Run(); err != nil {
 		return user.User{}, fmt.Errorf("error creating user: %w", err)
 	}
 	return person, nil
 }
 
-func (userService userService) updateUser(person user.User) (user.User, error) {
+func (us userService) updateUser(person user.User) (user.User, error) {
 
 	var result user.User
-	if err := userService.table.Update("id", person.Id).
+	if err := us.table.Update("id", person.Id).
 		Set("name", person.Name).
 		Set("age", person.Age).
 		Set("gender", person.Gender).
@@ -67,15 +67,15 @@ func (userService userService) updateUser(person user.User) (user.User, error) {
 	return result, nil
 }
 
-func (userService userService) GetListOfAllUsers() ([]user.DecoratedUser, error) {
+func (us userService) GetListOfAllUsers() ([]user.DecoratedUser, error) {
 
 	var users []user.User
-	if err := userService.table.Scan().All(&users); err != nil {
+	if err := us.table.Scan().All(&users); err != nil {
 		return nil, fmt.Errorf("error reading all users: %w", err)
 	}
 	var decoratedList []user.DecoratedUser
 	for _, user := range users {
-		if decorated, err := userService.getDecoratedUser(user); err != nil {
+		if decorated, err := us.getDecoratedUser(user); err != nil {
 			return nil, fmt.Errorf("error calling GetDecoratedUser: %w", err)
 		} else {
 			decoratedList = append(decoratedList, decorated)
@@ -84,29 +84,29 @@ func (userService userService) GetListOfAllUsers() ([]user.DecoratedUser, error)
 	return decoratedList, nil
 }
 
-func (userService userService) GetUser(id string) (user.User, error) {
+func (us userService) GetUser(id string) (user.User, error) {
 
 	var result user.User
-	if err := userService.table.Get("id", id).One(&result); err != nil {
+	if err := us.table.Get("id", id).One(&result); err != nil {
 		return user.User{}, fmt.Errorf("error reading user: %w", err)
 	}
 	return result, nil
 }
 
-func (userService userService) DeleteUser(id string) error {
+func (us userService) DeleteUser(id string) error {
 
-	if err := userService.table.Delete("id", id).Run(); err != nil {
+	if err := us.table.Delete("id", id).Run(); err != nil {
 		return fmt.Errorf("error deleting user: %w", err)
 	}
 	return nil
 }
 
-func (userService userService) getDecoratedUser(person user.User) (user.DecoratedUser, error) {
+func (us userService) getDecoratedUser(person user.User) (user.DecoratedUser, error) {
 	var regionList string
 	var contact string
 
 	for _, country := range person.Regions {
-		regionList += userService.regionService.GetEmojiForCountry(country) + " "
+		regionList += us.regionService.GetEmojiForCountry(country) + " "
 	}
 
 	if len(person.Email) > 0 {

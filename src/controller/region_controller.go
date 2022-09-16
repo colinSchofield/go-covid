@@ -29,6 +29,6 @@ func (controller regionController) GetListOfRegions(context *gin.Context) {
 	)
 }
 
-func (controller regionController) GetEmojiForCountry(country string) string {
-	return controller.regionService.GetEmojiForCountry(country)
+func (rc regionController) GetEmojiForCountry(country string) string {
+	return rc.regionService.GetEmojiForCountry(country)
 }

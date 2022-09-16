@@ -31,7 +31,7 @@ func NewUserController(userService service.UserService) UserController {
 func getUser(context *gin.Context) (user.User, error) {
 	var user user.User
 	if err := context.BindJSON(&user); err != nil {
-		errorString := fmt.Sprintf("Error creating user %s! Returned error was: %v", user.Name, err)
+		errorString := fmt.Sprintf("Error creating user %s! Returned error was: %s", user.Name, err)
 		config.Logger().Errorf(errorString)
 		context.JSON(
 			http.StatusBadRequest,
@@ -43,10 +43,10 @@ func getUser(context *gin.Context) (user.User, error) {
 	}
 }
 
-func (userController userController) CreateUser(context *gin.Context) {
+func (uc userController) CreateUser(context *gin.Context) {
 	if user, err := getUser(context); err == nil {
-		if person, err := userController.userService.CreateOrUpdateUser(user); err != nil {
-			errorString := fmt.Sprintf("Error creating user %s! Returned error was: %v", user.Name, err)
+		if person, err := uc.userService.CreateOrUpdateUser(user); err != nil {
+			errorString := fmt.Sprintf("Error creating user %s! Returned error was: %s", user.Name, err)
 			config.Logger().Errorf(errorString)
 			context.JSON(
 				http.StatusBadRequest,
@@ -61,10 +61,10 @@ func (userController userController) CreateUser(context *gin.Context) {
 	}
 }
 
-func (userController userController) UpdateUser(context *gin.Context) {
+func (uc userController) UpdateUser(context *gin.Context) {
 	if user, err := getUser(context); err == nil {
-		if person, err := userController.userService.CreateOrUpdateUser(user); err != nil {
-			errorString := fmt.Sprintf("Error updating user %s! Returned error was: %v", user.Name, err)
+		if person, err := uc.userService.CreateOrUpdateUser(user); err != nil {
+			errorString := fmt.Sprintf("Error updating user %s! Returned error was: %s", user.Name, err)
 			config.Logger().Errorf(errorString)
 			context.JSON(
 				http.StatusBadRequest,
@@ -79,9 +79,9 @@ func (userController userController) UpdateUser(context *gin.Context) {
 	}
 }
 
-func (userController userController) GetUser(context *gin.Context) {
+func (uc userController) GetUser(context *gin.Context) {
 	id := context.Param("id")
-	if user, err := userController.userService.GetUser(id); err != nil {
+	if user, err := uc.userService.GetUser(id); err != nil {
 		context.Writer.WriteHeader(http.StatusNotFound)
 	} else {
 		context.JSON(
@@ -91,8 +91,8 @@ func (userController userController) GetUser(context *gin.Context) {
 	}
 }
 
-func (userController userController) GetListOfAllUsers(context *gin.Context) {
-	if users, err := userController.userService.GetListOfAllUsers(); err != nil {
+func (uc userController) GetListOfAllUsers(context *gin.Context) {
+	if users, err := uc.userService.GetListOfAllUsers(); err != nil {
 		config.Logger().Warnf("error reading all users: %s", err)
 		context.Writer.WriteHeader(http.StatusInternalServerError)
 	} else {
@@ -103,9 +103,9 @@ func (userController userController) GetListOfAllUsers(context *gin.Context) {
 	}
 }
 
-func (userController userController) DeleteUser(context *gin.Context) {
+func (uc userController) DeleteUser(context *gin.Context) {
 	id := context.Param("id")
-	if err := userController.userService.DeleteUser(id); err != nil {
+	if err := uc.userService.DeleteUser(id); err != nil {
 		config.Logger().Warnf("error occurred deleting node: %s", err)
 		context.Writer.WriteHeader(http.StatusNotFound)
 

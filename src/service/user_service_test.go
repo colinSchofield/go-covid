@@ -22,13 +22,13 @@ func Test_CreatUserAndDelete(t *testing.T) {
 	createdPerson, err := userService.CreateOrUpdateUser(person)
 	// Then
 	if err != nil {
-		t.Errorf("Something went wrong: %v", err)
+		t.Errorf("something went wrong: %s", err)
 	}
 	if createdPerson.Id == "" {
 		t.Errorf("hash was not set!")
 	}
 	if err := userService.DeleteUser(createdPerson.Id); err != nil {
-		t.Errorf("an error occurred during delete: %v", err)
+		t.Errorf("an error occurred during delete: %s", err)
 	}
 }
 
@@ -39,13 +39,13 @@ func Test_GetListOfAllUsers(t *testing.T) {
 	users, err := userService.GetListOfAllUsers()
 	// Then
 	if err != nil {
-		t.Errorf("Something went wrong: %v", err)
+		t.Errorf("something went wrong: %s", err)
 	}
 	if len(users) == 0 {
-		t.Error("The returned list is empty?!")
+		t.Error("the returned list is empty?!")
 	}
 	if len(users[0].Id) == 0 || users[0].Age == 0 {
-		t.Error("Values are empty?!")
+		t.Error("values are empty?!")
 	}
 }
 
@@ -65,7 +65,7 @@ func Test_TestCrudOnUser(t *testing.T) {
 	createdPerson, err := userService.CreateOrUpdateUser(person)
 	// Then
 	if err != nil {
-		t.Errorf("Something went wrong: %v", err)
+		t.Errorf("something went wrong: %s", err)
 	}
 	// Given
 	createdPerson.Age = 66
@@ -73,19 +73,19 @@ func Test_TestCrudOnUser(t *testing.T) {
 	updatedPerson, err := userService.CreateOrUpdateUser(createdPerson)
 	// Then
 	if err != nil {
-		t.Errorf("Something went wrong: %v", err)
+		t.Errorf("something went wrong: %s", err)
 	}
 	if updatedPerson.Age != 66 {
-		t.Errorf("Age was not updated: %d", createdPerson.Age)
+		t.Errorf("age was not updated: %d", createdPerson.Age)
 	}
 	if _, err := userService.GetUser(createdPerson.Id); err != nil {
-		t.Errorf("Could not find the created user: %v", err)
+		t.Errorf("could not find the created user: %s", err)
 	}
 	if err := userService.DeleteUser(createdPerson.Id); err != nil {
-		t.Errorf("User could not be deleted: %v", err)
+		t.Errorf("user could not be deleted: %s", err)
 	}
 	if _, err := userService.GetUser(createdPerson.Id); err == nil {
-		t.Errorf("This created user, should have been deleted!?")
+		t.Errorf("this created user, should have been deleted!?")
 	}
 }
 
@@ -125,7 +125,7 @@ func Test_DecoratedUserRegionListUnknown(t *testing.T) {
 	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.RegionList != "   " {
-		t.Error("Region List information is not correct?")
+		t.Error("region List information is not correct?")
 	}
 }
 
@@ -145,7 +145,7 @@ func Test_DecoratedUserContact(t *testing.T) {
 	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "💌 💬" {
-		t.Error("Contact information is not correct?")
+		t.Error("contact information is not correct?")
 	}
 }
 
@@ -165,6 +165,6 @@ func Test_DecoratedUserEmptyContact(t *testing.T) {
 	decoratedUser, _ := userService.getDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "" {
-		t.Error("Contact information is not correct?")
+		t.Error("contact information is not correct?")
 	}
 }

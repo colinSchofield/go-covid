@@ -2,6 +2,6 @@ package user
 
 type DecoratedUser struct {
 	User
-	RegionList string
-	Contact    string
+	RegionList string `json:"regionList"`
+	Contact    string `json:"contact"`
 }

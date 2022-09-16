@@ -16,7 +16,7 @@ func Test_RestApiRequest(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error encountered: %s", err)
 	}
-	if len(response) == 0 {
+	if len(response.Response) == 0 || len(response.Response[0].Country) == 0 {
 		t.Error("Rest request -- the returned value is empty!?!")
 	}
 }
@@ -26,14 +26,14 @@ func Test_RestApiViaMock(t *testing.T) {
 	client := NewSummaryClient()
 	httpmock.ActivateNonDefault(resty.DefaultClient.GetClient())
 	httpmock.RegisterResponder("GET", "https://covid-193.p.rapidapi.com/statistics",
-		httpmock.NewStringResponder(200, "cool dude!?!"))
+		httpmock.NewStringResponder(200, "cool dude!?!")) // TODO fix this..
 	// When
 	response, err := client.GetCovid19DailySummary()
 	// Then
 	if err != nil {
 		t.Errorf("Error encountered: %s", err)
 	}
-	if len(response) == 0 {
+	if len(response.Response) == 0 {
 		t.Error("Rest request -- the returned value is empty!?!")
 	}
 }

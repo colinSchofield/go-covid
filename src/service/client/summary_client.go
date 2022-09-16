@@ -4,11 +4,12 @@ import (
 	"fmt"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/model/daily"
 	"gopkg.in/resty.v1"
 )
 
 type SummaryClient interface {
-	GetCovid19DailySummary() (string, error)
+	GetCovid19DailySummary() (daily.Daily, error)
 }
 
 type summaryClient struct {
@@ -32,25 +33,27 @@ func NewSummaryClient() SummaryClient {
 	}
 }
 
-func (summaryClient summaryClient) GetCovid19DailySummary() (string, error) {
+func (sc summaryClient) GetCovid19DailySummary() (daily.Daily, error) {
 
-	response, err := summaryClient.client.R().
+	var summary daily.Daily
+	response, err := sc.client.R().
 		SetHeader("Accept", "application/json").
-		SetHeader(hostHeader, summaryClient.apiHost).
-		SetHeader(apiKey, summaryClient.apiKey).
-		Get(summaryClient.apiEndPoint)
+		SetHeader(hostHeader, sc.apiHost).
+		SetHeader(apiKey, sc.apiKey).
+		SetResult(&summary).
+		Get(sc.apiEndPoint)
 
 	if err != nil {
 		config.Logger().Errorf("Error acquiring Restful Web Service API.. The error was: %s", err)
-		return "", err
+		return summary, err
 	}
 
 	if response.StatusCode() != 200 {
 		config.Logger().Error("HTTP Status Code indicated error: ", response.StatusCode())
-		return "", fmt.Errorf("HTTP Status Code indicated error: %d", response.StatusCode())
+		return summary, fmt.Errorf("HTTP Status Code indicated error: %d", response.StatusCode())
 	}
 
 	config.Logger().Infof("We have received the a payload of size %d", len(response.Body()))
 	config.Logger().Debugf("Contents of payload were: %s", response.Body())
-	return string(response.Body()), nil
+	return summary, nil
 }

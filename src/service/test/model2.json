@@ -1,0 +1,80 @@
+{
+    "get": "statistics",
+    "parameters": [],
+    "errors": [],
+    "results": 242,
+    "response": [
+      {
+        "continent": "Asia",
+        "country": "China",
+        "population": 1439323776,
+        "cases": {
+          "new": "+301",
+          "active": 6226,
+          "critical": 38,
+          "recovered": 234876,
+          "1M_pop": "171",
+          "total": 246328
+        },
+        "deaths": {
+          "new": null,
+          "1M_pop": "4",
+          "total": 5226
+        },
+        "tests": {
+          "1M_pop": "111163",
+          "total": 160000000
+        },
+        "day": "2022-09-09",
+        "time": "2022-09-09T20:45:07+00:00"
+      },
+      {
+        "continent": "Oceania",
+        "country": "Niue",
+        "population": 1650,
+        "cases": {
+          "new": "+2",
+          "active": 6,
+          "critical": null,
+          "recovered": 70,
+          "1M_pop": "46061",
+          "total": 76
+        },
+        "deaths": {
+          "new": null,
+          "1M_pop": null,
+          "total": null
+        },
+        "tests": {
+          "1M_pop": null,
+          "total": null
+        },
+        "day": "2022-09-09",
+        "time": "2022-09-09T20:45:07+00:00"
+      },
+      {
+        "continent": "Europe",
+        "country": "Italy",
+        "population": 1439323776,
+        "cases": {
+          "new": "+301",
+          "active": 6226,
+          "critical": 38,
+          "recovered": 234876,
+          "1M_pop": "171",
+          "total": 246328
+        },
+        "deaths": {
+          "new": null,
+          "1M_pop": "4",
+          "total": 5226
+        },
+        "tests": {
+          "1M_pop": "111163",
+          "total": 160000000
+        },
+        "day": "2022-09-09",
+        "time": "2022-09-09T20:45:07+00:00"
+      }
+    ]
+  }

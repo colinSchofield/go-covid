@@ -13,12 +13,12 @@ type regionService struct {
 	regions []model.Region
 }
 
-func (regionService regionService) GetListOfRegions() []model.Region {
-	return regionService.regions
+func (rs regionService) GetListOfRegions() []model.Region {
+	return rs.regions
 }
 
-func (regionService regionService) GetEmojiForCountry(country string) string {
-	for _, region := range regionService.GetListOfRegions() {
+func (rs regionService) GetEmojiForCountry(country string) string {
+	for _, region := range rs.GetListOfRegions() {
 		if region.Key == country {
 			return region.Flag
 		}
