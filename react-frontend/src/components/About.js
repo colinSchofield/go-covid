@@ -27,9 +27,9 @@ export default function About() {
               <br/>
               <strong>Colin Schofield</strong>
             </MDBCardTitle>
-            <p className='font-weight-bold blue-text'>Senior Java Developer</p>
+            <p className='font-weight-bold blue-text'>Senior Go Developer</p>
             <MDBCardText>
-              Colin is both an AWS backend Go (golang) and a Full Stack Developer. He has been working in Canada, USA,
+              Colin is both a backend Go (golang) and a Full Stack Developer. He has been working in Canada, USA,
               UK &amp; Australia for over fifteen years.
             </MDBCardText>
             <MDBCol>
