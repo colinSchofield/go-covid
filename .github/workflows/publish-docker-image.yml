@@ -24,6 +24,6 @@ jobs:
       - name: Build and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: src
+          context: go-src
           push: true
           tags: colinschofield/go-web:latest, colinschofield/go-web:${{ github.run_number }}
