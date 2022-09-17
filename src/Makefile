@@ -27,6 +27,6 @@ push:			## push the tagged version to the Docker Hub
 refresh:		## Initiate a rolling update of the Kubernetes managed cluster, reloading the current image from the Docker Hub
 	kubectl rollout restart deployment
 	kubectl get events
-	kubectl get pods
+	kubectl get pods -w -o wide
 
 update:  build tag push refresh			## Push and load the current version to the Kubernetes managed cluster
