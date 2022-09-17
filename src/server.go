@@ -46,7 +46,7 @@ func main() {
 	router.GET(apiVersion+"/list/daily", covidController.GetCovid19DailySummary)
 	router.GET(apiVersion+"/list/regions", regionController.GetListOfRegions)
 	router.POST(apiVersion+"/user", userController.CreateUser)
-	router.PUT(apiVersion+"/user", userController.UpdateUser)
+	router.PUT(apiVersion+"/user/:id", userController.UpdateUser)
 	router.GET(apiVersion+"/user/:id", userController.GetUser)
 	router.GET(apiVersion+"/user/list", userController.GetListOfAllUsers)
 	router.DELETE(apiVersion+"/user/:id", userController.DeleteUser)
