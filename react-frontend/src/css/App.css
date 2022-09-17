@@ -1,0 +1,92 @@
+.App {
+  text-align: center;
+}
+
+/* Used to line up the icon with the toggle buttons */
+.image-align {
+  vertical-align: text-bottom;
+}
+
+.emoji-align {
+  vertical-align: sub;
+}
+
+/* To enable a scrollable card for the region information */
+.scrollable {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+/* Keep the age related imagery in the same spot */
+.fixed-image-height {
+    height: 160px;
+    text-align: center;
+    background-position: center;
+    background-size: cover;
+}
+
+#searchField {
+  width: inherit;
+}
+
+/* Remove the sizePerPage dropdown because it is not positioned correctly */
+.react-bs-table-sizePerPage-dropdown {
+  visibility: hidden !important;
+}
+
+/* Remove centreing if in mobile mode */
+@media all and (min-width: 760px) {
+  .vertical-align {
+    min-height: 90%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 90vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+  }
+}
+
+img.emojione {
+  margin: 0px !important;
+  display: inline !important;
+
+  height: auto;
+  width: 50px;
+}
+
+#wrong-test {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  display: inline-block;
+}
+
+span.emoji {
+  font-size: 35px;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}

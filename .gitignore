@@ -1,9 +1,20 @@
-**.idea
-**.vscode
+### Go ###
 **.bin
 **coverage.out
 **vendor
-**.DS_Store
 **golangci.out
 **.build
 __debug_bin
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### dependencies ###
+node_modules/
+**.DS_Store

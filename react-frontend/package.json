@@ -1,0 +1,52 @@
+{
+  "name": "react-hooks-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.9.14",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.53",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "bootstrap": "^4.4.1",
+    "mdbreact": "^4.26.1",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-bootstrap-table-next": "^4.0.1",
+    "react-bootstrap-table2-paginator": "^2.1.2",
+    "react-bootstrap-table2-toolkit": "^2.1.2",
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0",
+    "react-ipgeolocation": "^1.2.0",
+    "react-router-config": "^5.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1",
+    "universal-cookie": "^4.0.3",
+    "url-loader": "^4.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "__Comment-On-Proxy1": "Using a proxy so that we can run the React front-end and the microservice independently,",
+  "__Comment-On-Proxy2": "hence, we are then able to use the React developer hot-reloading feature.",
+  "proxy": "http://localhost:80"
+}
