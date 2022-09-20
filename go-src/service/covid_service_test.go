@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"os"
+	"reflect"
 	"testing"
 
 	"git.com/colinSchofield/go-covid/model/daily"
@@ -74,4 +75,27 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 			}
 		}
 	}
+}
+
+func Test_genericReverseFunction(t *testing.T) {
+	// Given
+	input := []string{"1", "2", "3"}
+	expected := []string{"3", "2", "1"}
+	// When
+	reverse(input)
+	// Then
+	if !reflect.DeepEqual(input, expected) {
+		t.Errorf("input (%v) and expected (%v) arrays are not equal", input, expected)
+	}
+
+	// Given
+	inputInt := []int{1, 2, 3}
+	expectedInt := []int{3, 2, 1}
+	// When
+	reverse(inputInt)
+	// Then
+	if !reflect.DeepEqual(inputInt, expectedInt) {
+		t.Errorf("input (%v) and expected (%v) arrays are not equal", input, expected)
+	}
+
 }

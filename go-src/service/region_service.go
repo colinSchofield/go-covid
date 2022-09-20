@@ -66,7 +66,7 @@ func NewRegionService() RegionService {
 			{Key: "Bosnia-and-Herzegovina", Location: "Bosnia And Herzegovina", CountryCode: "BA", Iso: "bih", Flag: "🇧🇦"},
 			{Key: "Botswana", Location: "Botswana", CountryCode: "BW", Iso: "bwa", Flag: "🇧🇼"},
 			{Key: "Brazil", Location: "Brazil", CountryCode: "BR", Iso: "bra", Flag: "🇧🇷"},
-			{Key: "British-Virgin-Islands", Location: "British Virgin Islands", CountryCode: "VG", Iso: "vgb", Flag: "🇻🇬"},
+			{Key: "US-Virgin-Islands", Location: "US Virgin Islands", CountryCode: "VG", Iso: "vgb", Flag: "🇻🇬"},
 			{Key: "Brunei", Location: "Brunei", CountryCode: "BN", Iso: "brn", Flag: "🇧🇳"},
 			{Key: "Bulgaria", Location: "Bulgaria", CountryCode: "BG", Iso: "bgr", Flag: "🇧🇬"},
 			{Key: "Burkina-Faso", Location: "Burkina Faso", CountryCode: "BF", Iso: "bfa", Flag: "🇧🇫"},

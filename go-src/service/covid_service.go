@@ -26,7 +26,7 @@ type covidService struct {
 func NewCovidService(summaryClient client.SummaryClient, historyClient client.HistoryClient) CovidService {
 	excludeRegions := os.Getenv("EXCLUDE_REGIONS") // TODO
 	if len(excludeRegions) == 0 {
-		excludeRegions = "All|Asia|Oceania|Europe|North-America|Africa|South-America|Diamond-Princess-|ccedil|eacute|MS-Zaandam|Diamond-Princess"
+		excludeRegions = "All|Asia|Oceania|Europe|North-America|Africa|South-America|Diamond-Princess-|Cura&ccedil;ao|R&eacute;union|MS-Zaandam-|Diamond-Princess|guam|Cook Islands|Palau|Nauru|Kiribati|Niue|Tuvalu|Tonga|Micronesia|DPRK"
 	}
 
 	return covidService{
@@ -55,6 +55,12 @@ func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
 	}
 }
 
+func reverse[S any](input []S) {
+	for i, j := 0, len(input)-1; i < j; i, j = i+1, j-1 {
+		input[i], input[j] = input[j], input[i]
+	}
+}
+
 func (cs covidService) GetCovid19History(country string) (history.TableDetails, error) {
 	config.Logger().Debugf("Finding historical details for country %s", country)
 	iso := cs.regionService.GetIsoForCountry(country)
@@ -75,6 +81,10 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 			newCases[ix] = dayStats.NewCases
 			newDeaths[ix] = dayStats.NewDeaths
 		}
+
+		reverse(labels)
+		reverse(newCases)
+		reverse(newDeaths)
 
 		return history.TableDetails{
 			Flag:     cs.regionService.GetEmojiForCountry(country),
