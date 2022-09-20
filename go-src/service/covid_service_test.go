@@ -77,7 +77,7 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 	}
 }
 
-func Test_genericReverseFunction(t *testing.T) {
+func Test_GenericReverseFunction(t *testing.T) {
 	// Given
 	input := []string{"1", "2", "3"}
 	expected := []string{"3", "2", "1"}
@@ -97,5 +97,36 @@ func Test_genericReverseFunction(t *testing.T) {
 	if !reflect.DeepEqual(inputInt, expectedInt) {
 		t.Errorf("input (%v) and expected (%v) arrays are not equal", input, expected)
 	}
+}
 
+func Test_GetDayInMonth(t *testing.T) {
+
+	multiTest := []struct {
+		input    string
+		expected string
+	}{
+		{
+			input:    "2022-08-20",
+			expected: "20",
+		},
+		{
+			input:    "2022-08-",
+			expected: "",
+		},
+		{
+			input:    "2022/08/04",
+			expected: "2022/08/04",
+		},
+		{
+			input:    "",
+			expected: "",
+		},
+	}
+
+	for _, test := range multiTest {
+		if getDayInMonth(test.input) != test.expected {
+			t.Errorf("Tested (%s) and expected (%s), but got %s",
+				test.input, test.expected, getDayInMonth(test.input))
+		}
+	}
 }

@@ -61,6 +61,14 @@ func reverse[S any](input []S) {
 	}
 }
 
+func getDayInMonth(date string) string {
+	split := strings.Split(date, "-")
+	if len(split) != 3 {
+		return date
+	}
+	return split[2]
+}
+
 func (cs covidService) GetCovid19History(country string) (history.TableDetails, error) {
 	config.Logger().Debugf("Finding historical details for country %s", country)
 	iso := cs.regionService.GetIsoForCountry(country)
@@ -77,7 +85,7 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 		newCases := make([]int, len(historyStats))
 		newDeaths := make([]int, len(historyStats))
 		for ix, dayStats := range historyStats {
-			labels[ix] = dayStats.Date
+			labels[ix] = getDayInMonth(dayStats.Date)
 			newCases[ix] = dayStats.NewCases
 			newDeaths[ix] = dayStats.NewDeaths
 		}
