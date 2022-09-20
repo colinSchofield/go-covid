@@ -29,7 +29,7 @@ export default function About() {
             </MDBCardTitle>
             <p className='font-weight-bold blue-text'>Senior Go Developer</p>
             <MDBCardText>
-              Colin is both a backend Go (golang) and a Full Stack Developer. He has been working in Canada, USA,
+              Colin is both a backend Go and a Full Stack Developer. He has been working in Canada, USA,
               UK &amp; Australia for over fifteen years.
             </MDBCardText>
             <MDBCol>
@@ -72,11 +72,11 @@ export default function About() {
               <Tooltip title="Bootstrap: Responsive, mobile-first front-end CSS framework" arrow>
                 <Image src={BootStrapImg} rounded width='12%' />
               </Tooltip>
-              <Tooltip title="Go (golang): written backend microservice" arrow>
-                <Image src={GoImg} rounded width='12%' />
-              </Tooltip>
               <Tooltip title="Kubernetes (K8s): AWS EKS Managed Kubernetes Cluster" arrow>
                 <Image src={K8sImg} rounded width='12%' />
+              </Tooltip>
+              <Tooltip title="Go: written backend microservice" arrow>
+                <Image src={GoImg} rounded width='12%' />
               </Tooltip>
             </MDBCol>
             <MDBCardText>

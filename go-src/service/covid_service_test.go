@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"git.com/colinSchofield/go-covid/model/daily"
+	"git.com/colinSchofield/go-covid/service/client"
 )
 
 type summaryClientMock struct {
@@ -64,7 +65,7 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 
 		clientMock := summaryClientMock{file: test.fileName}
 		t.Setenv("EXCLUDE_REGIONS", test.excludeRegions)
-		covidService := NewCovidService(clientMock)
+		covidService := NewCovidService(clientMock, client.NewHistoryClient())
 		if daily, err := covidService.GetCovid19DailySummary(); err != nil {
 			t.Errorf("GetCovid19DailySummary returned an error of %s", err)
 		} else {

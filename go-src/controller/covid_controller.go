@@ -11,6 +11,7 @@ import (
 
 type CovidController interface {
 	GetCovid19DailySummary(context *gin.Context)
+	GetCovid19History(context *gin.Context)
 }
 
 type covidController struct {
@@ -26,6 +27,23 @@ func NewCovidController(covidService service.CovidService) CovidController {
 func (cc covidController) GetCovid19DailySummary(context *gin.Context) {
 	if response, err := cc.covidService.GetCovid19DailySummary(); err != nil {
 		errorString := fmt.Sprintf("Error in response to daily summary request! Returned error was: %s", err)
+		config.Logger().Errorf(errorString)
+		context.JSON(
+			http.StatusBadGateway,
+			errorString,
+		)
+	} else {
+		context.JSON(
+			http.StatusOK,
+			response,
+		)
+	}
+}
+
+func (cc covidController) GetCovid19History(context *gin.Context) {
+	country := context.Param("country")
+	if response, err := cc.covidService.GetCovid19History(country); err != nil {
+		errorString := fmt.Sprintf("Error in response to historical statistics request! Returned error was: %s", err)
 		config.Logger().Errorf(errorString)
 		context.JSON(
 			http.StatusBadGateway,

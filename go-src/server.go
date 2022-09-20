@@ -12,8 +12,9 @@ var (
 	userService   service.UserService   = service.NewUserService()
 	regionService service.RegionService = service.NewRegionService()
 	summaryClient client.SummaryClient  = client.NewSummaryClient()
+	historyClient client.HistoryClient  = client.NewHistoryClient()
 
-	covidService     service.CovidService        = service.NewCovidService(summaryClient)
+	covidService     service.CovidService        = service.NewCovidService(summaryClient, historyClient)
 	covidController  controller.CovidController  = controller.NewCovidController(covidService)
 	regionController controller.RegionController = controller.NewRegionController(regionService)
 	userController   controller.UserController   = controller.NewUserController(userService)
@@ -41,10 +42,14 @@ func CORSMiddleware() gin.HandlerFunc {
 
 func main() {
 	config.Logger().Info("Starting Rest API Service..")
+	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(CORSMiddleware())
+
 	router.GET(apiVersion+"/list/daily", covidController.GetCovid19DailySummary)
+	router.GET(apiVersion+"/list/monthly/:country", covidController.GetCovid19History)
 	router.GET(apiVersion+"/list/regions", regionController.GetListOfRegions)
+
 	router.POST(apiVersion+"/user", userController.CreateUser)
 	router.PUT(apiVersion+"/user/:id", userController.UpdateUser)
 	router.GET(apiVersion+"/user/:id", userController.GetUser)
