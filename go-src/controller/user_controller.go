@@ -13,6 +13,7 @@ import (
 type UserController interface {
 	CreateUser(context *gin.Context)
 	UpdateUser(context *gin.Context)
+	createOrUpdateUser(context *gin.Context)
 	GetListOfAllUsers(context *gin.Context)
 	GetUser(context *gin.Context)
 	DeleteUser(context *gin.Context)
@@ -28,25 +29,18 @@ func NewUserController(userService service.UserService) UserController {
 	}
 }
 
-func getUser(context *gin.Context) (user.User, error) {
-	var user user.User
-	if err := context.BindJSON(&user); err != nil {
-		errorString := fmt.Sprintf("Error creating user %s! Returned error was: %s", user.Name, err)
-		config.Logger().Errorf(errorString)
-		context.JSON(
-			http.StatusBadRequest,
-			errorString,
-		)
-		return user, fmt.Errorf(errorString)
-	} else {
-		return user, nil
-	}
+func (uc userController) CreateUser(context *gin.Context) {
+	uc.createOrUpdateUser(context)
 }
 
-func (uc userController) CreateUser(context *gin.Context) {
-	if user, err := getUser(context); err == nil {
+func (uc userController) UpdateUser(context *gin.Context) {
+	uc.createOrUpdateUser(context)
+}
+
+func (uc userController) createOrUpdateUser(context *gin.Context) {
+	if user, err := unmarshalUser(context); err == nil { // 'err == nil' is intentional as unmarshalUser handles error case
 		if person, err := uc.userService.CreateOrUpdateUser(user); err != nil {
-			errorString := fmt.Sprintf("Error creating user %s! Returned error was: %s", user.Name, err)
+			errorString := fmt.Sprintf("Error creating (or updating) user %s! Returned error was: %s", user.Name, err)
 			config.Logger().Errorf(errorString)
 			context.JSON(
 				http.StatusBadRequest,
@@ -61,21 +55,18 @@ func (uc userController) CreateUser(context *gin.Context) {
 	}
 }
 
-func (uc userController) UpdateUser(context *gin.Context) {
-	if user, err := getUser(context); err == nil {
-		if person, err := uc.userService.CreateOrUpdateUser(user); err != nil {
-			errorString := fmt.Sprintf("Error updating user %s! Returned error was: %s", user.Name, err)
-			config.Logger().Errorf(errorString)
-			context.JSON(
-				http.StatusBadRequest,
-				errorString,
-			)
-		} else {
-			context.JSON(
-				http.StatusOK,
-				person,
-			)
-		}
+func unmarshalUser(context *gin.Context) (user.User, error) {
+	var user user.User
+	if err := context.BindJSON(&user); err != nil {
+		errorString := fmt.Sprintf("Error unmarshalling user (%s)! Returned error was: %s", user.Name, err)
+		config.Logger().Errorf(errorString)
+		context.JSON(
+			http.StatusBadRequest,
+			errorString,
+		)
+		return user, fmt.Errorf(errorString)
+	} else {
+		return user, nil
 	}
 }
 

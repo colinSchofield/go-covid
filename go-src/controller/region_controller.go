@@ -22,10 +22,10 @@ func NewRegionController(regionService service.RegionService) RegionController {
 	}
 }
 
-func (controller regionController) GetListOfRegions(context *gin.Context) {
+func (rc regionController) GetListOfRegions(context *gin.Context) {
 	context.JSON(
 		http.StatusOK,
-		controller.regionService.GetListOfRegions(),
+		rc.regionService.GetListOfRegions(),
 	)
 }
 

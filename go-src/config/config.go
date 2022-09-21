@@ -24,7 +24,6 @@ const (
 var logger *log.Logger
 
 func init() {
-	// checkEnvironmentVariables()
 	logger = &log.Logger{
 		Out:       os.Stdout,
 		Level:     log.InfoLevel,
