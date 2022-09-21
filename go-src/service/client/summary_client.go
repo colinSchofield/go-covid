@@ -27,9 +27,9 @@ const (
 func NewSummaryClient() SummaryClient {
 	return summaryClient{
 		client:      resty.New(),
-		apiEndPoint: "https://covid-193.p.rapidapi.com/statistics",
-		apiHost:     "covid-193.p.rapidapi.com",
-		apiKey:      "cb1f09fd7dmsh35f7dd8afd27dfdp191e0cjsnca765ccf022a",
+		apiEndPoint: config.GetSummaryEndPoint(),
+		apiHost:     config.GetSummaryHost(),
+		apiKey:      config.GetSummaryKey(),
 	}
 }
 

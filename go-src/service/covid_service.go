@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"git.com/colinSchofield/go-covid/config"
@@ -24,16 +23,11 @@ type covidService struct {
 }
 
 func NewCovidService(summaryClient client.SummaryClient, historyClient client.HistoryClient) CovidService {
-	excludeRegions := os.Getenv("EXCLUDE_REGIONS") // TODO
-	if len(excludeRegions) == 0 {
-		excludeRegions = "All|Asia|Oceania|Europe|North-America|Africa|South-America|Diamond-Princess-|Cura&ccedil;ao|R&eacute;union|MS-Zaandam-|Diamond-Princess|guam|Cook Islands|Palau|Nauru|Kiribati|Niue|Tuvalu|Tonga|Micronesia|DPRK"
-	}
-
 	return covidService{
 		summaryClient: summaryClient,
 		historyClient: historyClient,
 		regionService: NewRegionService(),
-		excludeRegion: excludeRegions,
+		excludeRegion: config.GetExcludeRegion(),
 	}
 }
 

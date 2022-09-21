@@ -4,11 +4,18 @@ package service
 import (
 	"testing"
 
+	"git.com/colinSchofield/go-covid/config"
 	"git.com/colinSchofield/go-covid/model/user"
 )
 
+func setEnvironmentVariables(t *testing.T) {
+	t.Setenv(config.AWS_REGION, "ap-southeast-2")
+	t.Setenv(config.DB_TABLE_NAME, "User")
+}
+
 func Test_CreatUserAndDelete(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "", // this value will be set as a hash
@@ -34,6 +41,7 @@ func Test_CreatUserAndDelete(t *testing.T) {
 
 func Test_GetListOfAllUsers(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	// When
 	users, err := userService.GetListOfAllUsers()
@@ -51,6 +59,7 @@ func Test_GetListOfAllUsers(t *testing.T) {
 
 func Test_TestCrudOnUser(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "", // this value will be set as a hash
@@ -91,6 +100,7 @@ func Test_TestCrudOnUser(t *testing.T) {
 
 func Test_DecoratedUserRegionList(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "",
@@ -111,6 +121,7 @@ func Test_DecoratedUserRegionList(t *testing.T) {
 
 func Test_DecoratedUserRegionListUnknown(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "",
@@ -131,6 +142,7 @@ func Test_DecoratedUserRegionListUnknown(t *testing.T) {
 
 func Test_DecoratedUserContact(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "",
@@ -151,6 +163,7 @@ func Test_DecoratedUserContact(t *testing.T) {
 
 func Test_DecoratedUserEmptyContact(t *testing.T) {
 	// Given
+	setEnvironmentVariables(t)
 	userService := NewUserService()
 	person := user.User{
 		Id:      "",

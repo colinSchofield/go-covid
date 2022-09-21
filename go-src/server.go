@@ -20,10 +20,6 @@ var (
 	userController   controller.UserController   = controller.NewUserController(userService)
 )
 
-const (
-	apiVersion = "/api/1.0"
-)
-
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -42,6 +38,7 @@ func CORSMiddleware() gin.HandlerFunc {
 
 func main() {
 	config.Logger().Info("Starting Rest API Service..")
+	apiVersion := config.GetApiVersion()
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(CORSMiddleware())

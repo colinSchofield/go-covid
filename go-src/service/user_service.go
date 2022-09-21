@@ -29,8 +29,8 @@ type userService struct {
 func NewUserService() UserService {
 	regionService := NewRegionService()
 	sess := session.Must(session.NewSession())
-	db := dynamo.New(sess, &aws.Config{Region: aws.String("ap-southeast-2")}) // TODO add environment variable
-	table := db.Table("User")                                                 // TODO add environment variable
+	db := dynamo.New(sess, &aws.Config{Region: aws.String(config.GetAwsRegion())})
+	table := db.Table(config.GetDbTableName())
 
 	return userService{
 		regionService: regionService,

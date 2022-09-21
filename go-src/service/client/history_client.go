@@ -22,9 +22,9 @@ type historyClient struct {
 func NewHistoryClient() HistoryClient {
 	return historyClient{
 		client:      resty.New(),
-		apiEndPoint: "https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api/covid-ovid-data/sixmonth/%s",
-		apiHost:     "vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com",
-		apiKey:      "cb1f09fd7dmsh35f7dd8afd27dfdp191e0cjsnca765ccf022a",
+		apiEndPoint: config.GetHistoryEndPoint(),
+		apiHost:     config.GetHistoryHost(),
+		apiKey:      config.GetHistoryKey(),
 	}
 }
 

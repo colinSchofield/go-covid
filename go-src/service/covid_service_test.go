@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"git.com/colinSchofield/go-covid/config"
 	"git.com/colinSchofield/go-covid/model/daily"
 	"git.com/colinSchofield/go-covid/service/client"
 )
@@ -28,8 +29,15 @@ func (sm summaryClientMock) GetCovid19DailySummary() (daily.Daily, error) {
 	return daily, nil
 }
 
+func setHistoryEnvironmentVariables(t *testing.T) {
+	t.Setenv(config.HISTORY_END_POINT, "https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api/covid-ovid-data/sixmonth/%s")
+	t.Setenv(config.HISTORY_HOST, "vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com")
+	t.Setenv(config.HISTORY_KEY, "cb1f09fd7dmsh35f7dd8afd27dfdp191e0cjsnca765ccf022a")
+}
+
 func Test_GetCovid19DailySummary(t *testing.T) {
 
+	setHistoryEnvironmentVariables(t)
 	multiTest := []struct {
 		fileName       string
 		excludeRegions string
@@ -63,9 +71,8 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 	}
 
 	for _, test := range multiTest {
-
 		clientMock := summaryClientMock{file: test.fileName}
-		t.Setenv("EXCLUDE_REGIONS", test.excludeRegions)
+		t.Setenv(config.EXCLUDE_REGIONS, test.excludeRegions)
 		covidService := NewCovidService(clientMock, client.NewHistoryClient())
 		if daily, err := covidService.GetCovid19DailySummary(); err != nil {
 			t.Errorf("GetCovid19DailySummary returned an error of %s", err)
