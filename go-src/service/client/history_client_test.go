@@ -1,9 +1,11 @@
 package client
 
 import (
+	"errors"
 	"testing"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/custom_error"
 )
 
 func setHistoryEnvironmentVariables(t *testing.T) {
@@ -19,8 +21,8 @@ func Test_RestApiHistoryRequest(t *testing.T) {
 	// When
 	response, err := client.GetCovid19History("aus")
 	// Then
-	if err != nil {
-		t.Errorf("Error encountered: %s", err)
+	if err != nil && !errors.As(err, &custom_error.ClientTimeout{}) {
+		t.Error("ClientTimeout was not found in the error chain")
 	}
 	if len(response) == 0 {
 		t.Error("Rest request -- the returned value is empty!?!")

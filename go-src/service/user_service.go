@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/custom_error"
 	"git.com/colinSchofield/go-covid/model/user"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -88,7 +89,7 @@ func (us userService) GetUser(id string) (user.User, error) {
 
 	var result user.User
 	if err := us.table.Get("id", id).One(&result); err != nil {
-		return user.User{}, fmt.Errorf("error reading user: %w", err)
+		return user.User{}, custom_error.NotFound{Wrapped: err}
 	}
 	return result, nil
 }

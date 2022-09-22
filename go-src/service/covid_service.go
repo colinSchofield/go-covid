@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/custom_error"
 	"git.com/colinSchofield/go-covid/model/daily"
 	"git.com/colinSchofield/go-covid/model/history"
 	"git.com/colinSchofield/go-covid/service/client"
@@ -67,7 +68,7 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 	config.Logger().Debugf("Finding historical details for country %s", country)
 	iso := cs.regionService.GetIsoForCountry(country)
 	if iso == "" {
-		return history.TableDetails{}, fmt.Errorf("no iso for country of %s", country)
+		return history.TableDetails{}, custom_error.NotFound{Wrapped: fmt.Errorf("no iso for country of %s", country)}
 	}
 	config.Logger().Debugf("Country %s, equates to iso of %s", country, iso)
 	if historyStats, err := cs.historyClient.GetCovid19History(iso); err != nil {

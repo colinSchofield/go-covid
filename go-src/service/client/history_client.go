@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/custom_error"
 	"git.com/colinSchofield/go-covid/model/history"
 	"gopkg.in/resty.v1"
 )
@@ -44,7 +45,7 @@ func (hc historyClient) GetCovid19History(iso string) ([]history.History, error)
 		Get(endPoint)
 
 	if err != nil && strings.Contains(err.Error(), "Client.Timeout") {
-		return fakeHistoricalData(), nil
+		return fakeHistoricalData(), custom_error.ClientTimeout{Wrapped: fmt.Errorf("The client request resulted in a Timeout.. Error was: %w", err)}
 	}
 
 	if err != nil {
