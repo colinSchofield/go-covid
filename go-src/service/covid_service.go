@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -71,7 +72,7 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 		return history.TableDetails{}, custom_error.NotFound{Wrapped: fmt.Errorf("no iso for country of %s", country)}
 	}
 	config.Logger().Debugf("Country %s, equates to iso of %s", country, iso)
-	if historyStats, err := cs.historyClient.GetCovid19History(iso); err != nil {
+	if historyStats, err := cs.historyClient.GetCovid19History(iso); err != nil && !errors.As(err, &custom_error.ClientTimeout{}) {
 		config.Logger().Warnf("Unexpected error occurred fetching the historical information: %s", err)
 		return history.TableDetails{}, err
 	} else {
