@@ -1,5 +1,12 @@
 package controller
 
+/*
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+
+	This service provides access to CRUD (i.e. Create, Read, Update & Delete) of values stored in a User AWS DynamoDB.
+	All appropriate Web HTTP responses and modes of access are used
+*/
+
 import (
 	"fmt"
 	"net/http"

@@ -1,5 +1,14 @@
 package service
 
+/*
+	service -- the service layer provides a boundary to the backend, exposed through a set of interfaces
+
+	This provides the regions of the world, as a set of static values, that will not change as shown below:
+
+	GetListOfRegions -- List of countries in the world, along with their emoji flag, id and iso values
+	GetEmojiForCountry -- Provides, for a given country, the emoji flag
+*/
+
 import (
 	"git.com/colinSchofield/go-covid/model"
 )

@@ -1,5 +1,13 @@
 package controller
 
+/*
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+
+	All requests relating to obtaining Covid information are directed here, as shown below:
+
+	GetCovid19DailySummary -- Provides via a Rest API call to services on RapidAPI, the daily Covid statistics
+	GetCovid19History -- Provides via a Rest API call to services on RapidAPI, the highlevel statistics for the past month
+*/
 import (
 	"errors"
 	"fmt"

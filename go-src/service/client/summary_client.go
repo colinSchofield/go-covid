@@ -1,5 +1,13 @@
 package client
 
+/*
+	client -- controlled by the service layer. It provides access to 3rd party API's and message brokers
+
+	RapidAPI is a market place for B2B API's and, in this particular application, it provides Covid statistics, as shown below:
+
+	GetCovid19DailySummary -- Provides via a Rest API call to services on RapidAPI, the daily Covid statistics
+*/
+
 import (
 	"fmt"
 

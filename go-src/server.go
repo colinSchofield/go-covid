@@ -1,5 +1,23 @@
 package main
 
+/*
+	The main package is solely used as an entry point to the application.
+
+	This microservice provides support for a React based responsive web application. It is hosted on Kubernetes via AWS EKS.
+	This microservice uses gin as its web container, which provides an elegant routing of services with high performance.
+	The components are all instantiated in this file via constructor injection, allowing mocking and improved testability.
+
+	The design pattern of 'separation of concerns' is employed here. The layers are split up using the Go package mechanism,
+	as shown below:
+
+	main -- routes the request to the controller
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+	service -- the service layer provides a boundary to the backend, exposed through a set of interfaces
+	client -- controlled by the service layer. It provides access to 3rd party API's, message and event brokers
+	custom_error -- the set of application specific custom errors, that are typically used for communication between layers
+	model -- Used as the VO (i.e Value Objects) for communicating between layers and ultimately as JSON output to the web
+*/
+
 import (
 	"git.com/colinSchofield/go-covid/config"
 	"git.com/colinSchofield/go-covid/controller"
@@ -8,6 +26,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// The components are all instantiated in this file via constructor injection, allowing mocking and improved testability
 var (
 	userService   service.UserService   = service.NewUserService()
 	regionService service.RegionService = service.NewRegionService()
@@ -20,6 +39,7 @@ var (
 	userController   controller.UserController   = controller.NewUserController(userService)
 )
 
+// Middleware allowing CORS (Cross-Origin Resource Sharing) Access
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")

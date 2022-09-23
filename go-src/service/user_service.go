@@ -1,5 +1,12 @@
 package service
 
+/*
+	service -- the service layer provides a boundary to the backend, exposed through a set of interfaces
+
+	This service provides access to CRUD (i.e. Create, Read, Update & Delete) of values stored in a User AWS DynamoDB.
+	TODO -- Consider adding another layer called DAO or repository to improve testability of this module
+*/
+
 import (
 	"fmt"
 

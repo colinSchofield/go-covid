@@ -1,5 +1,14 @@
 package service
 
+/*
+	service -- the service layer provides a boundary to the backend, exposed through a set of interfaces
+
+	All requests relating to obtaining Covid information are directed through this interface, as shown below:
+
+	GetCovid19DailySummary -- Provides via a Rest API call to services on RapidAPI, the daily Covid statistics
+	GetCovid19History -- Provides via a Rest API call to services on RapidAPI, the highlevel statistics for the past month
+*/
+
 import (
 	"errors"
 	"fmt"
