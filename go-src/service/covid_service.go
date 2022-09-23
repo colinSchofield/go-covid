@@ -34,9 +34,11 @@ func NewCovidService(summaryClient client.SummaryClient, historyClient client.Hi
 }
 
 func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
+
 	if summary, err := cs.summaryClient.GetCovid19DailySummary(); err != nil {
-		config.Logger().Warnf("Unexpected error occurred fetching the daily summary information: %s", err)
-		return summary, err
+		wrappedError := fmt.Errorf("unexpected error occurred fetching the daily summary information: %w", err)
+		config.Logger().Error(wrappedError)
+		return summary, wrappedError
 	} else {
 		ix := 0
 		for _, location := range summary.Response {
@@ -52,12 +54,14 @@ func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
 }
 
 func reverse[S any](input []S) {
+
 	for i, j := 0, len(input)-1; i < j; i, j = i+1, j-1 {
 		input[i], input[j] = input[j], input[i]
 	}
 }
 
 func getDayInMonth(date string) string {
+
 	split := strings.Split(date, "-")
 	if len(split) != 3 {
 		return date
@@ -66,6 +70,7 @@ func getDayInMonth(date string) string {
 }
 
 func (cs covidService) GetCovid19History(country string) (history.TableDetails, error) {
+
 	config.Logger().Debugf("Finding historical details for country %s", country)
 	iso := cs.regionService.GetIsoForCountry(country)
 	if iso == "" {
@@ -73,10 +78,13 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 	}
 	config.Logger().Debugf("Country %s, equates to iso of %s", country, iso)
 	if historyStats, err := cs.historyClient.GetCovid19History(iso); err != nil && !errors.As(err, &custom_error.ClientTimeout{}) {
-		config.Logger().Warnf("Unexpected error occurred fetching the historical information: %s", err)
-		return history.TableDetails{}, err
+
+		wrappedError := fmt.Errorf("unexpected error occurred fetching the historical information: %w", err)
+		config.Logger().Error(wrappedError)
+		return history.TableDetails{}, wrappedError
 	} else {
 
+		config.Logger().Debugf("%d results were returned for country (%s)", len(historyStats), country)
 		labels := make([]string, len(historyStats))
 		newCases := make([]int, len(historyStats))
 		newDeaths := make([]int, len(historyStats))

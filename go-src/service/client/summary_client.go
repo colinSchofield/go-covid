@@ -44,8 +44,9 @@ func (sc summaryClient) GetCovid19DailySummary() (daily.Daily, error) {
 		Get(sc.apiEndPoint)
 
 	if err != nil {
-		config.Logger().Errorf("Error acquiring Restful Web Service API.. The error was: %s", err)
-		return summary, err
+		wrappedError := fmt.Errorf("error acquiring Restful Web Service API.. The error was: %w", err)
+		config.Logger().Error(wrappedError)
+		return summary, wrappedError
 	}
 
 	if response.StatusCode() != 200 {

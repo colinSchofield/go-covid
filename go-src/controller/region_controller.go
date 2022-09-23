@@ -23,10 +23,7 @@ func NewRegionController(regionService service.RegionService) RegionController {
 }
 
 func (rc regionController) GetListOfRegions(context *gin.Context) {
-	context.JSON(
-		http.StatusOK,
-		rc.regionService.GetListOfRegions(),
-	)
+	context.JSON(http.StatusOK, rc.regionService.GetListOfRegions())
 }
 
 func (rc regionController) GetEmojiForCountry(country string) string {

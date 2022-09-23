@@ -19,6 +19,7 @@ func (rs regionService) GetListOfRegions() []model.Region {
 }
 
 func (rs regionService) GetEmojiForCountry(country string) string {
+
 	for _, region := range rs.GetListOfRegions() {
 		if region.Key == country {
 			return region.Flag
@@ -28,6 +29,7 @@ func (rs regionService) GetEmojiForCountry(country string) string {
 }
 
 func (rs regionService) GetIsoForCountry(country string) string {
+
 	for _, region := range rs.GetListOfRegions() {
 		if region.Key == country {
 			return region.Iso
@@ -37,6 +39,7 @@ func (rs regionService) GetIsoForCountry(country string) string {
 }
 
 func NewRegionService() RegionService {
+
 	return regionService{
 		regions: []model.Region{
 			{Key: "Afghanistan", Location: "Afghanistan", CountryCode: "AF", Iso: "afg", Flag: "🇦🇫"},

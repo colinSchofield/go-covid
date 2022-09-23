@@ -45,12 +45,13 @@ func (hc historyClient) GetCovid19History(iso string) ([]history.History, error)
 		Get(endPoint)
 
 	if err != nil && strings.Contains(err.Error(), "Client.Timeout") {
-		return fakeHistoricalData(), custom_error.ClientTimeout{Wrapped: fmt.Errorf("The client request resulted in a Timeout.. Error was: %w", err)}
+		return fakeHistoricalData(), custom_error.ClientTimeout{Wrapped: fmt.Errorf("the client request resulted in a Timeout.. Error was: %w", err)}
 	}
 
 	if err != nil {
-		config.Logger().Errorf("Error acquiring Restful Web Service API.. The error was: %s", err)
-		return pastWeek, err
+		wrappedError := fmt.Errorf("error acquiring Restful Web Service API.. The error was: %w", err)
+		config.Logger().Error(wrappedError)
+		return pastWeek, wrappedError
 	}
 
 	if response.StatusCode() != 200 {
@@ -63,7 +64,7 @@ func (hc historyClient) GetCovid19History(iso string) ([]history.History, error)
 	return pastWeek, nil
 }
 
-// RapidAPI is NOT a precessional service and consequently it is at times unreliable -- here are a few 'canned' results
+// RapidAPI is NOT a professional service and consequently it is at times unreliable -- here are a few 'canned' results
 func fakeHistoricalData() []history.History {
 
 	return []history.History{

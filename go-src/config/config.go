@@ -38,6 +38,7 @@ func Logger() *log.Logger {
 // The environment variables dictate end-points and configuration values -- all are mandatory
 // If one of the environment variables cannot be found a PANIC will be initiated
 func variableMustExist(key string) {
+
 	if os.Getenv(key) == "" {
 		str := fmt.Sprintf("Environment variable '%s' cannot be empty. Exiting..", key)
 		panic(str)

@@ -49,7 +49,9 @@ func (us userService) CreateOrUpdateUser(person user.User) (user.User, error) {
 	config.Logger().Debugf("Creating user, with name of %s", person.Name)
 	person.Id = uuid.New().String()
 	if err := us.table.Put(person).Run(); err != nil {
-		return user.User{}, fmt.Errorf("error creating user: %w", err)
+		wrappedError := fmt.Errorf("error creating user: %w", err)
+		config.Logger().Error(wrappedError)
+		return user.User{}, wrappedError
 	}
 	return person, nil
 }
@@ -63,7 +65,9 @@ func (us userService) updateUser(person user.User) (user.User, error) {
 		Set("gender", person.Gender).
 		Set("regions", person.Regions).
 		Value(&result); err != nil {
-		return user.User{}, fmt.Errorf("error updating user: %w", err)
+		wrappedError := fmt.Errorf("error updating user: %w", err)
+		config.Logger().Error(wrappedError)
+		return user.User{}, wrappedError
 	}
 	return result, nil
 }
@@ -72,12 +76,16 @@ func (us userService) GetListOfAllUsers() ([]user.DecoratedUser, error) {
 
 	var users []user.User
 	if err := us.table.Scan().All(&users); err != nil {
-		return nil, fmt.Errorf("error reading all users: %w", err)
+		wrappedError := fmt.Errorf("error reading all users: %w", err)
+		config.Logger().Error(wrappedError)
+		return nil, wrappedError
 	}
 	var decoratedList []user.DecoratedUser
 	for _, user := range users {
 		if decorated, err := us.getDecoratedUser(user); err != nil {
-			return nil, fmt.Errorf("error calling GetDecoratedUser: %w", err)
+			wrappedError := fmt.Errorf("error calling GetDecoratedUser: %w", err)
+			config.Logger().Error(wrappedError)
+			return nil, wrappedError
 		} else {
 			decoratedList = append(decoratedList, decorated)
 		}
@@ -97,15 +105,17 @@ func (us userService) GetUser(id string) (user.User, error) {
 func (us userService) DeleteUser(id string) error {
 
 	if err := us.table.Delete("id", id).Run(); err != nil {
-		return fmt.Errorf("error deleting user: %w", err)
+		wrappedError := fmt.Errorf("error deleting user: %w", err)
+		config.Logger().Error(wrappedError)
+		return wrappedError
 	}
 	return nil
 }
 
 func (us userService) getDecoratedUser(person user.User) (user.DecoratedUser, error) {
+
 	var regionList string
 	var contact string
-
 	for _, country := range person.Regions {
 		regionList += us.regionService.GetEmojiForCountry(country) + " "
 	}
