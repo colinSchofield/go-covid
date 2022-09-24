@@ -54,7 +54,7 @@ func (hc historyClient) GetCovid19History(iso string) ([]history.History, error)
 		SetResult(&pastWeek).
 		Get(endPoint)
 
-	if err != nil && strings.Contains(err.Error(), "Client.Timeout") {
+	if err != nil && (strings.Contains(err.Error(), "Client.Timeout") || strings.Contains(err.Error(), "deadline exceeded")) {
 		return fakeHistoricalData(), custom_error.ClientTimeout{Wrapped: fmt.Errorf("the client request resulted in a Timeout.. Error was: %w", err)}
 	}
 

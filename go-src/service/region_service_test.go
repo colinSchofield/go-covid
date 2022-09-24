@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type isoCountryConversion struct {
@@ -51,5 +53,27 @@ func Test_RegionISOFromCountryCode(t *testing.T) {
 				t.Errorf("Error did not match iso of %s", country.ThreeLetterSymbol)
 			}
 		}
+	}
+}
+
+func Test_GetIsoForCountry(t *testing.T) {
+
+	regionService := NewRegionService()
+
+	multiTest := []struct {
+		scenario string
+		country  string
+		iso      string
+	}{
+		{scenario: "Australia", country: "Australia", iso: "aus"},
+		{scenario: "USA", country: "USA", iso: "usa"},
+		{scenario: "Canada", country: "Canada", iso: "can"},
+		{scenario: "Unknown Location", country: "Unknown", iso: ""},
+	}
+
+	for _, test := range multiTest {
+
+		iso := regionService.GetIsoForCountry(test.country)
+		assert.Equal(t, iso, test.iso, test.iso, test.scenario)
 	}
 }

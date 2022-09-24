@@ -21,12 +21,12 @@ import (
 )
 
 type UserService interface {
-	CreateOrUpdateUser(user user.User) (user.User, error)
-	updateUser(person user.User) (user.User, error)
+	CreateOrUpdateUser(person user.User) (user.User, error)
+	UpdateUser(person user.User) (user.User, error)
 	GetListOfAllUsers() ([]user.DecoratedUser, error)
 	GetUser(id string) (user.User, error)
 	DeleteUser(id string) error
-	getDecoratedUser(user user.User) (user.DecoratedUser, error)
+	GetDecoratedUser(person user.User) (user.DecoratedUser, error)
 }
 
 type userService struct {
@@ -50,7 +50,7 @@ func (us userService) CreateOrUpdateUser(person user.User) (user.User, error) {
 
 	if len(person.Id) > 0 {
 		config.Logger().Debugf("User already exists, with id of %s.. Updating the user", person.Id)
-		return us.updateUser(person)
+		return us.UpdateUser(person)
 	}
 
 	config.Logger().Debugf("Creating user, with name of %s", person.Name)
@@ -63,7 +63,7 @@ func (us userService) CreateOrUpdateUser(person user.User) (user.User, error) {
 	return person, nil
 }
 
-func (us userService) updateUser(person user.User) (user.User, error) {
+func (us userService) UpdateUser(person user.User) (user.User, error) {
 
 	var result user.User
 	if err := us.table.Update("id", person.Id).
@@ -89,7 +89,7 @@ func (us userService) GetListOfAllUsers() ([]user.DecoratedUser, error) {
 	}
 	var decoratedList []user.DecoratedUser
 	for _, user := range users {
-		if decorated, err := us.getDecoratedUser(user); err != nil {
+		if decorated, err := us.GetDecoratedUser(user); err != nil {
 			wrappedError := fmt.Errorf("error calling GetDecoratedUser: %w", err)
 			config.Logger().Error(wrappedError)
 			return nil, wrappedError
@@ -119,7 +119,7 @@ func (us userService) DeleteUser(id string) error {
 	return nil
 }
 
-func (us userService) getDecoratedUser(person user.User) (user.DecoratedUser, error) {
+func (us userService) GetDecoratedUser(person user.User) (user.DecoratedUser, error) {
 
 	var regionList string
 	var contact string

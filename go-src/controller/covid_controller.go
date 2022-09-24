@@ -1,7 +1,7 @@
 package controller
 
 /*
-	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access with the service layer
 
 	All requests relating to obtaining Covid information are directed here, as shown below:
 
@@ -59,7 +59,7 @@ func (cc covidController) GetCovid19History(context *gin.Context) {
 		} else {
 			wrappedError := fmt.Errorf("error in response to historical statistics request! Returned error was: %w", err)
 			config.Logger().Error(wrappedError)
-			context.JSON(http.StatusBadGateway, gin.H{"error": wrappedError.Error()})
+			context.JSON(http.StatusInternalServerError, gin.H{"error": wrappedError.Error()})
 		}
 	} else {
 		context.JSON(http.StatusOK, response)

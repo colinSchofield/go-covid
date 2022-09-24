@@ -4,45 +4,57 @@ import (
 	"testing"
 
 	"git.com/colinSchofield/go-covid/config"
+	"git.com/colinSchofield/go-covid/model/daily"
 	"github.com/jarcoal/httpmock"
-	"gopkg.in/resty.v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func setSummaryEnvironmentVariables(t *testing.T) {
-	t.Setenv(config.SUMMARY_END_POINT, "https://covid-193.p.rapidapi.com/statistics")
-	t.Setenv(config.SUMMARY_HOST, "covid-193.p.rapidapi.com")
-	t.Setenv(config.SUMMARY_KEY, "cb1f09fd7dmsh35f7dd8afd27dfdp191e0cjsnca765ccf022a")
+	t.Setenv(config.SUMMARY_END_POINT, "https://mock.com")
+	t.Setenv(config.SUMMARY_HOST, "mocked")
+	t.Setenv(config.SUMMARY_KEY, "mocked")
 }
 
-func Test_RestApiRequest(t *testing.T) {
+func Test_RestApiClientRequest(t *testing.T) {
 	// Given
+	httpmock.Activate() // Mocking via jarcoal/httpmock
+	mockResponse := daily.Daily{Results: 0}
+	defer httpmock.DeactivateAndReset()
+	httpmock.RegisterResponder("GET", "https://mock.com", httpmock.NewJsonResponderOrPanic(200, mockResponse))
 	setSummaryEnvironmentVariables(t)
 	client := NewSummaryClient()
 	// When
 	response, err := client.GetCovid19DailySummary()
 	// Then
-	if err != nil {
-		t.Errorf("Error encountered: %s", err)
-	}
-	if len(response.Response) == 0 || len(response.Response[0].Country) == 0 {
-		t.Error("Rest request -- the returned value is empty!?!")
-	}
+	assert.Equal(t, err, nil)
+	assert.NotNil(t, response)
 }
 
-func Test_RestApiViaMock(t *testing.T) {
+func Test_RestApiClientRequestErrorCode(t *testing.T) {
 	// Given
+	httpmock.Activate() // Mocking via jarcoal/httpmock
+	mockResponse := daily.Daily{Results: 0}
+	defer httpmock.DeactivateAndReset()
+	httpmock.RegisterResponder("GET", "https://mock.com", httpmock.NewJsonResponderOrPanic(500, mockResponse))
 	setSummaryEnvironmentVariables(t)
 	client := NewSummaryClient()
-	httpmock.ActivateNonDefault(resty.DefaultClient.GetClient())
-	httpmock.RegisterResponder("GET", "https://covid-193.p.rapidapi.com/statistics",
-		httpmock.NewStringResponder(200, "cool dude!?!")) // TODO fix this..
 	// When
 	response, err := client.GetCovid19DailySummary()
 	// Then
-	if err != nil {
-		t.Errorf("Error encountered: %s", err)
-	}
-	if len(response.Response) == 0 {
-		t.Error("Rest request -- the returned value is empty!?!")
-	}
+	assert.NotNil(t, err)
+	assert.NotNil(t, response, 0)
+}
+
+func Test_RestApiClientRequestConnectionError(t *testing.T) {
+	// Given
+	httpmock.Activate() // Mocking via jarcoal/httpmock
+	defer httpmock.DeactivateAndReset()
+	httpmock.RegisterResponder("GET", "https://mock.com", nil)
+	setSummaryEnvironmentVariables(t)
+	client := NewSummaryClient()
+	// When
+	response, err := client.GetCovid19DailySummary()
+	// Then
+	assert.NotNil(t, err)
+	assert.NotNil(t, response, 0)
 }

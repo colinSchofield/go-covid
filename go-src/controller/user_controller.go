@@ -1,7 +1,7 @@
 package controller
 
 /*
-	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access with the service layer
 
 	This service provides access to CRUD (i.e. Create, Read, Update & Delete) of values stored in a User AWS DynamoDB.
 	All appropriate Web HTTP responses and modes of access are used
@@ -50,7 +50,7 @@ func (uc userController) CreateUser(context *gin.Context) {
 		config.Logger().Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		config.Logger().Infof("User was created successfully (%s)", resultUser)
+		config.Logger().Infof("User was created successfully (%v)", resultUser)
 		context.JSON(http.StatusOK, resultUser)
 	}
 }
@@ -64,7 +64,7 @@ func (uc userController) UpdateUser(context *gin.Context) {
 		config.Logger().Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		config.Logger().Infof("User was updated successfully (%s)", resultUser)
+		config.Logger().Infof("User was updated successfully (%v)", resultUser)
 		context.JSON(http.StatusOK, updateUser)
 	}
 }
@@ -84,7 +84,9 @@ func (uc userController) GetUser(context *gin.Context) {
 
 	id := context.Param("id")
 	if user, err := uc.userService.GetUser(id); err != nil {
-		context.Writer.WriteHeader(http.StatusNotFound)
+		wrappedError := fmt.Errorf("user with id of (%s) was not found: %w", id, err)
+		config.Logger().Error(wrappedError)
+		context.JSON(http.StatusNotFound, gin.H{"error": wrappedError.Error()})
 	} else {
 		context.JSON(http.StatusOK, user)
 	}
@@ -107,7 +109,7 @@ func (uc userController) DeleteUser(context *gin.Context) {
 	if err := uc.userService.DeleteUser(id); err != nil {
 		wrappedError := fmt.Errorf("error occurred deleting node: %w", err)
 		config.Logger().Error(wrappedError)
-		context.JSON(http.StatusNotFound, gin.H{"error": wrappedError.Error()})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": wrappedError.Error()})
 	} else {
 		context.Writer.WriteHeader(http.StatusOK)
 	}

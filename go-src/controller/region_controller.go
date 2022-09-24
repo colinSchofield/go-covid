@@ -1,7 +1,7 @@
 package controller
 
 /*
-	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access to the service layer
+	controller -- this layer has direct access to the web/http layer. Its purpose is to mediate access with the service layer
 
 	This provides the regions of the world, as static values, that will not change as shown below:
 

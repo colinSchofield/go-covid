@@ -2,12 +2,14 @@ package controller
 
 import (
 	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"git.com/colinSchofield/go-covid/model"
 	"git.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_HappyPathAllFlags(t *testing.T) {
@@ -20,15 +22,11 @@ func Test_HappyPathAllFlags(t *testing.T) {
 	// When
 	controller.GetListOfRegions(context)
 	// Then
-	if record.Code != 200 {
-		t.Errorf("Unexpected HTTP return code. Expected 200, but got %d", record.Code)
-	}
+	assert.Equal(t, record.Code, http.StatusOK)
 	if err := json.Unmarshal(record.Body.Bytes(), &regions); err != nil {
 		t.Errorf("String could not be unmarshalled: %s", err)
 	}
-	if len(regions) == 0 {
-		t.Errorf("Region object is empty!")
-	}
+	assert.Greater(t, len(regions), 0)
 	for _, region := range regions {
 		if region.Key == "Australia" {
 			return
@@ -46,9 +44,7 @@ func Test_HappyPathGetFlag(t *testing.T) {
 	// When
 	flag := controller.GetEmojiForCountry(australianCountry)
 	// Then
-	if flag != expectedFlag {
-		t.Errorf("Flag did not match! Was expecting %s, but got %s", expectedFlag, flag)
-	}
+	assert.Equal(t, flag, expectedFlag)
 }
 
 func Test_GetUnknownFlag(t *testing.T) {
@@ -60,7 +56,5 @@ func Test_GetUnknownFlag(t *testing.T) {
 	// When
 	flag := controller.GetEmojiForCountry(unknownCountry)
 	// Then
-	if flag != expectedFlag {
-		t.Errorf("Flag did not match! Was expecting %s, but got %s", expectedFlag, flag)
-	}
+	assert.Equal(t, flag, expectedFlag)
 }

@@ -112,7 +112,7 @@ func Test_DecoratedUserRegionList(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.getDecoratedUser(person)
+	decoratedUser, _ := userService.GetDecoratedUser(person)
 	// Then
 	if decoratedUser.RegionList != "🇦🇺 🇨🇦 🇬🇧 " {
 		t.Error("Region List information is not correct?")
@@ -133,7 +133,7 @@ func Test_DecoratedUserRegionListUnknown(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.getDecoratedUser(person)
+	decoratedUser, _ := userService.GetDecoratedUser(person)
 	// Then
 	if decoratedUser.RegionList != "   " {
 		t.Error("region List information is not correct?")
@@ -154,7 +154,7 @@ func Test_DecoratedUserContact(t *testing.T) {
 		Sms:     "123-432-1233",
 	}
 	// When
-	decoratedUser, _ := userService.getDecoratedUser(person)
+	decoratedUser, _ := userService.GetDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "💌 💬" {
 		t.Error("contact information is not correct?")
@@ -175,7 +175,7 @@ func Test_DecoratedUserEmptyContact(t *testing.T) {
 		Sms:     "",
 	}
 	// When
-	decoratedUser, _ := userService.getDecoratedUser(person)
+	decoratedUser, _ := userService.GetDecoratedUser(person)
 	// Then
 	if decoratedUser.Contact != "" {
 		t.Error("contact information is not correct?")
