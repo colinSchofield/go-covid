@@ -1,7 +1,7 @@
 package main
 
 /*
-	The main package is solely used as an entry point to the application.
+	The main package routes requests to the controller.
 
 	This microservice provides support for a React based responsive web application. It is hosted on Kubernetes via AWS EKS.
 	This microservice uses gin as its web container, which provides an elegant routing of services with high performance.

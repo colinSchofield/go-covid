@@ -81,9 +81,9 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 		excludeRegions string
 		elementsInMap  int
 	}{
-		{fileName: "test/model1.json", excludeRegions: "China", elementsInMap: 1},
+		{fileName: "test/model1.json", excludeRegions: "China", elementsInMap: 0},
 		{fileName: "test/model1.json", excludeRegions: "China|Niue", elementsInMap: 0},
-		{fileName: "test/model2.json", excludeRegions: "None", elementsInMap: 3},
+		{fileName: "test/model2.json", excludeRegions: "None", elementsInMap: 2},
 		{fileName: "test/model2.json", excludeRegions: "China|Niue", elementsInMap: 1},
 		{fileName: "test/model2.json", excludeRegions: "Italy|China|Niue|", elementsInMap: 0},
 	}
@@ -96,7 +96,7 @@ func Test_GetCovid19DailySummary(t *testing.T) {
 			t.Errorf("GetCovid19DailySummary returned an error of %s", err)
 		} else {
 			// Then
-			assert.Equal(t, len(daily.Response), test.elementsInMap)
+			assert.Equal(t, test.elementsInMap, len(daily.Response))
 		}
 	}
 }

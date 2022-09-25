@@ -51,7 +51,9 @@ func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
 	} else {
 		ix := 0
 		for _, location := range summary.Response {
-			if !strings.Contains(cs.excludeRegion, location.Country) {
+			if !strings.Contains(cs.excludeRegion, location.Country) &&
+				len(cs.regionService.GetIsoForCountry(location.Country)) > 0 {
+
 				location.DecoratedCountry = cs.regionService.GetEmojiForCountry(location.Country) + " " + location.Country
 				summary.Response[ix] = location
 				ix++
