@@ -21,11 +21,11 @@ Users may also sign-up for a newsletter which they will be sent via email, or th
 
 This program was written as a Go (1.19) microservice, on an Amazon Elastic Kubernetes Service (EKS). This service is running as a 3 node cluster distributed over multiple AZ. 
 
-The application uses Gin which provides a full-featured web framework. AWS DynamoDB provides the persistence tier, for storage of signed up users.
+The application uses Gin which provides a full-featured web framework. AWS DynamoDB provides the persistence tier, for storage of the signed up users.
 
-GitHub Actions loads compiles and pushes the code to Docker.
+GitHub Actions loads builds and pushes an image to Docker.
 
-Test Driven Design (TDD) has been employed during the creation of this application. Frameworks such as httpMock and testify assisted during this phase (and ultimately by stubbing out interfaces).
+Test Driven Design (TDD) has been employed during the creation of this application. Frameworks such as httpMock and testify assisted during the development phase (and ultimately through the technique of stubbing out interfaces).
 
 The design pattern of *'separation of concerns'* is employed in this development. The layers are split up using the Go package mechanism, as shown below:
 
@@ -37,9 +37,9 @@ The design pattern of *'separation of concerns'* is employed in this development
   - **model** -- Used as the VO (i.e Value Objects) for communicating between layers and ultimately as JSON output to the web
 
 The front end of the application was written using **React JS** ([React Hooks](https://reactjs.org/docs/hooks-intro.html))
-together with front end HTML/CSS styling via [Bootstrap](https://getbootstrap.com).
+together with HTML/CSS styling via [Bootstrap](https://getbootstrap.com).
  
- ### How to deploy the Application to AWS
+ ### How to deploy the Application into AWS
  You must have the following to run this application:
  - Docker container
  - Make
@@ -78,7 +78,7 @@ together with front end HTML/CSS styling via [Bootstrap](https://getbootstrap.co
 9. cd ../go-src
 10. make update        
  ```
- **Note**: It can be quite an **expensive** option to run an AWS EKS. This may be avoided by either running your application locally, using `make run` or inside a minikube installation.
+ **Note**: It can be quite an **expensive** option to run an AWS EKS installation. This may be avoided by either running your application locally, using `make run`, or inside a minikube installation.
 
 ### Further Readings
 
