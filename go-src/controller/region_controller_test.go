@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"git.com/colinSchofield/go-covid/model"
-	"git.com/colinSchofield/go-covid/service"
+	"github.com/colinSchofield/go-covid/model"
+	"github.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )

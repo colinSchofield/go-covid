@@ -10,9 +10,9 @@ package service
 import (
 	"fmt"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/custom_error"
-	"git.com/colinSchofield/go-covid/model/user"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/custom_error"
+	"github.com/colinSchofield/go-covid/model/user"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"

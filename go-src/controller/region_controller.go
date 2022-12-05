@@ -12,7 +12,7 @@ package controller
 import (
 	"net/http"
 
-	"git.com/colinSchofield/go-covid/service"
+	"github.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 )
 

@@ -11,8 +11,8 @@ import (
 	"reflect"
 	"testing"
 
-	"git.com/colinSchofield/go-covid/model/user"
-	"git.com/colinSchofield/go-covid/service"
+	"github.com/colinSchofield/go-covid/model/user"
+	"github.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )

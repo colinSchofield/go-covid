@@ -1,8 +1,10 @@
+// config package provides access to configuration environment variables together with the application logging framework
 package config
 
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -18,6 +20,7 @@ const (
 	HISTORY_KEY       = "HISTORY_KEY"
 	AWS_REGION        = "AWS_REGION"
 	DB_TABLE_NAME     = "DB_TABLE_NAME"
+	CACHE_TTL         = "CACHE_TTL"
 )
 
 // The init function initialises the logger only once
@@ -36,7 +39,7 @@ func Logger() *log.Logger {
 }
 
 // The environment variables dictate end-points and configuration values -- all are mandatory
-// If one of the environment variables cannot be found a PANIC will be initiated
+// If one of the environment variables cannot be found a PANIC will be initiated -- Fail Fast
 func variableMustExist(key string) {
 
 	if os.Getenv(key) == "" {
@@ -93,4 +96,13 @@ func GetAwsRegion() string {
 func GetDbTableName() string {
 	variableMustExist(DB_TABLE_NAME)
 	return os.Getenv(DB_TABLE_NAME)
+}
+
+func GetCacheTimeToLive() int {
+	variableMustExist(CACHE_TTL)
+	if ix, err := strconv.Atoi(os.Getenv(CACHE_TTL)); err != nil {
+		panic(err)
+	} else {
+		return ix
+	}
 }

@@ -10,7 +10,7 @@ package service
 */
 
 import (
-	"git.com/colinSchofield/go-covid/model"
+	"github.com/colinSchofield/go-covid/model"
 )
 
 type RegionService interface {

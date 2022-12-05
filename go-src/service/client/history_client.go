@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/custom_error"
-	"git.com/colinSchofield/go-covid/model/history"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/custom_error"
+	"github.com/colinSchofield/go-covid/model/history"
 	"gopkg.in/resty.v1"
 )
 
@@ -45,33 +45,30 @@ func (hc historyClient) GetCovid19History(iso string) ([]history.History, error)
 
 	var pastWeek []history.History
 	endPoint := fmt.Sprintf(hc.apiEndPoint, iso)
-	response, err := hc.client.
+
+	switch response, err := hc.client.
 		SetTimeout(time.Duration(5*time.Second)).
 		R().
 		SetHeader("Accept", "application/json").
 		SetHeader(hostHeader, hc.apiHost).
 		SetHeader(apiKey, hc.apiKey).
 		SetResult(&pastWeek).
-		Get(endPoint)
+		Get(endPoint); {
 
-	if err != nil && (strings.Contains(err.Error(), "Client.Timeout") || strings.Contains(err.Error(), "deadline exceeded")) {
+	case err != nil && (strings.Contains(err.Error(), "Client.Timeout") || strings.Contains(err.Error(), "deadline exceeded")):
 		return fakeHistoricalData(), custom_error.ClientTimeout{Wrapped: fmt.Errorf("the client request resulted in a Timeout.. Error was: %w", err)}
-	}
-
-	if err != nil {
+	case err != nil:
 		wrappedError := fmt.Errorf("error acquiring Restful Web Service API.. The error was: %w", err)
 		config.Logger().Error(wrappedError)
 		return pastWeek, wrappedError
-	}
-
-	if response.StatusCode() != 200 {
+	case response.StatusCode() != 200:
 		config.Logger().Error("HTTP Status Code indicated error: ", response.StatusCode())
 		return pastWeek, fmt.Errorf("HTTP Status Code indicated error: %d", response.StatusCode())
+	default:
+		config.Logger().Infof("We have received the a payload of size %d", len(response.Body()))
+		config.Logger().Debugf("Contents of payload were: %s", response.Body())
+		return pastWeek, nil
 	}
-
-	config.Logger().Infof("We have received the a payload of size %d", len(response.Body()))
-	config.Logger().Debugf("Contents of payload were: %s", response.Body())
-	return pastWeek, nil
 }
 
 // RapidAPI is NOT a professional service and consequently it is at times unreliable -- here are a few 'canned' results

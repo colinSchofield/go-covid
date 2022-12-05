@@ -42,6 +42,8 @@ spec:
           value: ap-southeast-2
         - name: DB_TABLE_NAME    
           value: User
+        - name: CACHE_TTL    
+          value: 480          
 ---
 apiVersion: v1
 kind: Service

@@ -13,20 +13,23 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/custom_error"
-	"git.com/colinSchofield/go-covid/model/daily"
-	"git.com/colinSchofield/go-covid/model/history"
-	"git.com/colinSchofield/go-covid/service/client"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/custom_error"
+	"github.com/colinSchofield/go-covid/model/daily"
+	"github.com/colinSchofield/go-covid/model/history"
+	"github.com/colinSchofield/go-covid/service/client"
+	"github.com/patrickmn/go-cache"
 )
 
 type CovidService interface {
-	GetCovid19DailySummary() (daily.Daily, error)
-	GetCovid19History(country string) (history.TableDetails, error)
+	GetCovid19DailySummary() (*daily.Daily, error)
+	GetCovid19History(country string) (*history.TableDetails, error)
 }
 
 type covidService struct {
+	clientCache   *cache.Cache
 	summaryClient client.SummaryClient
 	historyClient client.HistoryClient
 	regionService RegionService
@@ -34,7 +37,9 @@ type covidService struct {
 }
 
 func NewCovidService(summaryClient client.SummaryClient, historyClient client.HistoryClient) CovidService {
+	ttl := time.Duration(config.GetCacheTimeToLive()) * time.Minute
 	return covidService{
+		clientCache:   cache.New(ttl, 4*ttl),
 		summaryClient: summaryClient,
 		historyClient: historyClient,
 		regionService: NewRegionService(),
@@ -42,7 +47,12 @@ func NewCovidService(summaryClient client.SummaryClient, historyClient client.Hi
 	}
 }
 
-func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
+func (cs covidService) GetCovid19DailySummary() (*daily.Daily, error) {
+
+	if dailyCache, found := cs.clientCache.Get("daily"); found {
+		config.Logger().Debug("Cache of Daily Summary was used")
+		return dailyCache.(*daily.Daily), nil
+	}
 
 	if summary, err := cs.summaryClient.GetCovid19DailySummary(); err != nil {
 		wrappedError := fmt.Errorf("unexpected error occurred fetching the daily summary information: %w", err)
@@ -60,6 +70,8 @@ func (cs covidService) GetCovid19DailySummary() (daily.Daily, error) {
 			}
 		}
 		summary.Response = summary.Response[:ix]
+		cs.clientCache.Add("daily", summary, cache.DefaultExpiration)
+		config.Logger().Debug("Stored Cache of Daily Summary")
 		return summary, nil
 	}
 }
@@ -80,19 +92,24 @@ func getDayInMonth(date string) string {
 	return split[2]
 }
 
-func (cs covidService) GetCovid19History(country string) (history.TableDetails, error) {
+func (cs covidService) GetCovid19History(country string) (*history.TableDetails, error) {
+
+	if dailyCache, found := cs.clientCache.Get(country); found {
+		config.Logger().Debug("Cache of Covid history for location %d was used", country)
+		return dailyCache.(*history.TableDetails), nil
+	}
 
 	config.Logger().Debugf("Finding historical details for country %s", country)
 	iso := cs.regionService.GetIsoForCountry(country)
 	if iso == "" {
-		return history.TableDetails{}, custom_error.NotFound{Wrapped: fmt.Errorf("no iso for country of %s", country)}
+		return &history.TableDetails{}, custom_error.NotFound{Wrapped: fmt.Errorf("no iso for country of %s", country)}
 	}
 	config.Logger().Debugf("Country %s, equates to iso of %s", country, iso)
 	if historyStats, err := cs.historyClient.GetCovid19History(iso); err != nil && !errors.As(err, &custom_error.ClientTimeout{}) {
 
 		wrappedError := fmt.Errorf("unexpected error occurred fetching the historical information: %w", err)
 		config.Logger().Error(wrappedError)
-		return history.TableDetails{}, wrappedError
+		return &history.TableDetails{}, wrappedError
 	} else {
 
 		config.Logger().Debugf("%d results were returned for country (%s)", len(historyStats), country)
@@ -109,11 +126,15 @@ func (cs covidService) GetCovid19History(country string) (history.TableDetails, 
 		reverse(newCases)
 		reverse(newDeaths)
 
-		return history.TableDetails{
+		historyStats := &history.TableDetails{
 			Flag:     cs.regionService.GetEmojiForCountry(country),
 			Labels:   labels,
 			NewCases: newCases,
 			Deaths:   newDeaths,
-		}, nil
+		}
+
+		cs.clientCache.Add(country, historyStats, cache.DefaultExpiration)
+		config.Logger().Debug("Stored Cache of Covid history for location %d", country)
+		return historyStats, nil
 	}
 }

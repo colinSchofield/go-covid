@@ -10,6 +10,7 @@ ENV HISTORY_HOST      = vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rap
 ENV HISTORY_KEY       = cb1f09fd7dmsh35f7dd8afd27dfdp191e0cjsnca765ccf022a
 ENV AWS_REGION        = ap-southeast-2
 ENV DB_TABLE_NAME     = User
+ENV CACHE_TTL         = 480
 
 RUN mkdir /app
 ADD . /app

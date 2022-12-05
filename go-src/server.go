@@ -19,10 +19,10 @@ package main
 */
 
 import (
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/controller"
-	"git.com/colinSchofield/go-covid/service"
-	"git.com/colinSchofield/go-covid/service/client"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/controller"
+	"github.com/colinSchofield/go-covid/service"
+	"github.com/colinSchofield/go-covid/service/client"
 	"github.com/gin-gonic/gin"
 )
 

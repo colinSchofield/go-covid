@@ -12,10 +12,10 @@ import (
 	"net/http"
 	"strings"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/custom_error"
-	"git.com/colinSchofield/go-covid/model/user"
-	"git.com/colinSchofield/go-covid/service"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/custom_error"
+	"github.com/colinSchofield/go-covid/model/user"
+	"github.com/colinSchofield/go-covid/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,19 +39,23 @@ func NewUserController(userService service.UserService) UserController {
 
 func (uc userController) CreateUser(context *gin.Context) {
 
-	if updateUser, err := unmarshalUser(context); err != nil {
+	switch updateUser, err := unmarshalUser(context); {
+	case err != nil:
 		config.Logger().Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	} else if len(updateUser.Id) > 0 {
+	case len(updateUser.Id) > 0:
 		wrappedError := fmt.Errorf("error validating user on Create -- user contains an Id? request User: %v", updateUser)
 		config.Logger().Error(wrappedError)
 		context.JSON(http.StatusBadRequest, gin.H{"error": wrappedError.Error()})
-	} else if resultUser, err := uc.userService.CreateOrUpdateUser(updateUser); err != nil {
-		config.Logger().Error(err)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	} else {
-		config.Logger().Infof("User was created successfully (%v)", resultUser)
-		context.JSON(http.StatusOK, resultUser)
+	default:
+
+		if resultUser, err := uc.userService.CreateOrUpdateUser(updateUser); err != nil {
+			config.Logger().Error(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		} else {
+			config.Logger().Infof("User was created successfully (%v)", resultUser)
+			context.JSON(http.StatusOK, resultUser)
+		}
 	}
 }
 

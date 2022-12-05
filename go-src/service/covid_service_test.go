@@ -7,11 +7,11 @@ import (
 	"reflect"
 	"testing"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/custom_error"
-	"git.com/colinSchofield/go-covid/model/daily"
-	"git.com/colinSchofield/go-covid/model/history"
-	"git.com/colinSchofield/go-covid/service/client"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/custom_error"
+	"github.com/colinSchofield/go-covid/model/daily"
+	"github.com/colinSchofield/go-covid/model/history"
+	"github.com/colinSchofield/go-covid/service/client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,24 +19,24 @@ type summaryClientMock struct {
 	file string
 }
 
-func (sm summaryClientMock) GetCovid19DailySummary() (daily.Daily, error) {
+func (sm summaryClientMock) GetCovid19DailySummary() (*daily.Daily, error) {
 	jsonAsString, err := os.ReadFile(sm.file)
 	if err != nil {
-		return daily.Daily{}, err
+		return &daily.Daily{}, err
 	}
 
 	var daily daily.Daily
 	if err := json.Unmarshal([]byte(jsonAsString), &daily); err != nil {
-		return daily, err
+		return &daily, err
 	}
 
-	return daily, nil
+	return &daily, nil
 }
 
 type summaryClientErrorMock struct{}
 
-func (sm summaryClientErrorMock) GetCovid19DailySummary() (daily.Daily, error) {
-	return daily.Daily{}, errors.New("Error reading Daily Summary")
+func (sm summaryClientErrorMock) GetCovid19DailySummary() (*daily.Daily, error) {
+	return &daily.Daily{}, errors.New("Error reading Daily Summary")
 }
 
 type historyClientMock struct{}
@@ -64,6 +64,7 @@ func (hc historyClientTimeoutErrorMock) GetCovid19History(iso string) ([]history
 }
 
 func setHistoryEnvironmentVariables(t *testing.T) {
+	t.Setenv(config.CACHE_TTL, "50")
 	t.Setenv(config.SUMMARY_END_POINT, "https://mock.com")
 	t.Setenv(config.SUMMARY_HOST, "mock")
 	t.Setenv(config.SUMMARY_KEY, "mock")

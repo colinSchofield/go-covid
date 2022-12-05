@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/model/history"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/model/history"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )

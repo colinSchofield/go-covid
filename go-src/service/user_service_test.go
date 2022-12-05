@@ -4,8 +4,8 @@ package service
 import (
 	"testing"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/model/user"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/model/user"
 )
 
 func setEnvironmentVariables(t *testing.T) {

@@ -3,8 +3,8 @@ package client
 import (
 	"testing"
 
-	"git.com/colinSchofield/go-covid/config"
-	"git.com/colinSchofield/go-covid/model/daily"
+	"github.com/colinSchofield/go-covid/config"
+	"github.com/colinSchofield/go-covid/model/daily"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
