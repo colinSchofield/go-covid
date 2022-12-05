@@ -95,7 +95,7 @@ func getDayInMonth(date string) string {
 func (cs covidService) GetCovid19History(country string) (*history.TableDetails, error) {
 
 	if dailyCache, found := cs.clientCache.Get(country); found {
-		config.Logger().Debug("Cache of Covid history for location %d was used", country)
+		config.Logger().Debugf("Cache of Covid history for location %s was used", country)
 		return dailyCache.(*history.TableDetails), nil
 	}
 
@@ -134,7 +134,7 @@ func (cs covidService) GetCovid19History(country string) (*history.TableDetails,
 		}
 
 		cs.clientCache.Add(country, historyStats, cache.DefaultExpiration)
-		config.Logger().Debug("Stored Cache of Covid history for location %d", country)
+		config.Logger().Debugf("Stored Cache of Covid history for location %s", country)
 		return historyStats, nil
 	}
 }
