@@ -5,6 +5,7 @@
 **golangci.out
 **.build
 __debug_bin
+go-covid-api
 
 ### IntelliJ IDEA ###
 .idea

@@ -25,9 +25,12 @@ provider:
 
 functions:  
     covid-api:
-        handler: go-covid-api
-        events:
-            - http: GET /{proxy+}
+      handler: go-covid-api
+      events:
+      - http: 
+          path: /{proxy+}
+          method: any
+          cors: true
 package:
     patterns:
         - '!*/**'
