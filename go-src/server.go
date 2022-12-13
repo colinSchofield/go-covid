@@ -19,6 +19,11 @@ package main
 */
 
 import (
+	"context"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/colinSchofield/go-covid/config"
 	"github.com/colinSchofield/go-covid/controller"
 	"github.com/colinSchofield/go-covid/service"
@@ -56,7 +61,9 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func main() {
+var ginLambda *ginadapter.GinLambda
+
+func init() {
 	config.Logger().Info("Starting Rest API Service..")
 	apiVersion := config.GetApiVersion()
 	// gin.SetMode(gin.ReleaseMode)
@@ -72,5 +79,14 @@ func main() {
 	router.GET(apiVersion+"/user/:id", userController.GetUser)
 	router.GET(apiVersion+"/user/list", userController.GetListOfAllUsers)
 	router.DELETE(apiVersion+"/user/:id", userController.DeleteUser)
-	router.Run()
+
+	ginLambda = ginadapter.New(router)
+}
+
+func HandleRequest(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return ginLambda.ProxyWithContext(ctx, req)
+}
+
+func main() {
+	lambda.Start(HandleRequest)
 }
